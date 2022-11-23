@@ -32,8 +32,6 @@ class Extension {
 
     constructor(uuid) {
         this._uuid = uuid;
-
-        //ExtensionUtils.initTranslations();
     }
 
     enable() {
