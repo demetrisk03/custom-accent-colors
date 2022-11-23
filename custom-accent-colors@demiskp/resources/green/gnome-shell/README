@@ -1,3 +1,0 @@
-sassc -a gnome-shell.scss gnome-shell.css
-
-sassc -a gnome-shell-high-contrast.scss gnome-shell-high-contrast.css
