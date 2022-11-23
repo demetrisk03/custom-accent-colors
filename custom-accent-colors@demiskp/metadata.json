@@ -1,0 +1,9 @@
+{
+  "name": "Custom Accent Colors",
+  "description": "Custom Accent Colors for Gnome.",
+  "uuid": "custom-accent-colors@demiskp",
+  "version": 1,
+  "shell-version": [
+    "43"
+  ]
+}

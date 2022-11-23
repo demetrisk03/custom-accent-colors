@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.custom-accent-colors" path="/org/gnome/shell/extensions/custom-accent-colors/">
+    <key name="accent-color" type="s">
+      <default>"blue"</default>
+    </key>
+    <key name="theme-flatpak" type="b">
+      <default>false</default>
+    </key>
+    <key name="theme-gtk3" type="b">
+      <default>false</default>
+    </key>
+    <key name="theme-shell" type="b">
+      <default>false</default>
+    </key>
+  </schema>
+</schemalist>
