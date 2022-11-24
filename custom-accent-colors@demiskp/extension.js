@@ -40,7 +40,7 @@ class Extension {
         
         let _accentColor = this._settings.get_string('accent-color');
         
-        this._settings.connect('changed::accent-color', () => {
+        this._handlerAccentColor = this._settings.connect('changed::accent-color', () => {
             _accentColor = this._settings.get_string('accent-color');
             update_gtk4_theming(_accentColor);
             if (this._settings.get_boolean('theme-gtk3') == true) {
@@ -50,13 +50,13 @@ class Extension {
                 update_shell_theming(this._settings.get_boolean('theme-shell'), _accentColor);
             }
         });
-        this._settings.connect('changed::theme-flatpak', () => {
+        this._handlerFlatpak = this._settings.connect('changed::theme-flatpak', () => {
             update_flatpak_theming(this._settings.get_boolean('theme-flatpak'));
         });
-        this._settings.connect('changed::theme-gtk3', () => {
+        this._handlerGTK3 = this._settings.connect('changed::theme-gtk3', () => {
             update_gtk3_theming(this._settings.get_boolean('theme-gtk3'), _accentColor);
         });
-        this._settings.connect('changed::theme-shell', () => {
+        this._handlerShell = this._settings.connect('changed::theme-shell', () => {
             if (this._settings.get_boolean('theme-shell') == true) {
                 create_file_dir(HomeDir + '/.local/share/themes/CustomAccentColors/gnome-shell');
                 copy_file_dir(MeDir + '/resources/' + _accentColor + '/gnome-shell/toggle-on.svg',
@@ -109,7 +109,22 @@ class Extension {
             delete_file_dir(HomeDir + '/.local/share/themes/CustomAccentColors');
         }
         
-        this._settings?.run_dispose();
+        if (this._handlerAccentColor) {
+            this._settings.disconnect(this._handlerAccentColor);
+            this._handlerAccentColor = null;
+        }
+        if (this._handlerFlatpak) {
+            this._settings.disconnect(this._handlerFlatpak);
+            this._handlerFlatpak = null;
+        }
+        if (this._handlerGTK3) {
+            this._settings.disconnect(this._handlerGTK3);
+            this._handlerGTK3 = null;
+        }
+        if (this._handlerShell) {
+            this._settings.disconnect(this._handlerShell);
+            this._handlerShell = null;
+        }
         this._settings = null;
     }
 }
