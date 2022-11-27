@@ -129,7 +129,7 @@ class Extension {
             try {
                 GLib.spawn_command_line_async(
                     'flatpak override --user --nofilesystem=xdg-config/gtk-4.0');
-            } catch(e) {
+            } catch (e) {
                 logError(e);
             }
         }
@@ -184,7 +184,7 @@ function create_file_dir(path) {
     const file = Gio.File.new_for_path(path);
     try {
         file.make_directory_with_parents(null);
-    } catch(e) {
+    } catch (e) {
         log(e);
     }
 }
@@ -220,7 +220,7 @@ async function delete_file_dir(path) {
                 }
             );
         });
-    } catch(e) {
+    } catch (e) {
         log(e);
     }
 }
@@ -242,7 +242,7 @@ function update_flatpak_theming(themeit) {
         try {
             GLib.spawn_command_line_async(
                 'flatpak override --user --filesystem=xdg-config/gtk-4.0:ro');
-        } catch(e) {
+        } catch (e) {
             logError(e);
         }
     } else {
@@ -255,7 +255,7 @@ function update_flatpak_theming(themeit) {
         try {
             GLib.spawn_command_line_async(
                 'flatpak override --user --nofilesystem=xdg-config/gtk-4.0');
-        } catch(e) {
+        } catch (e) {
             logError(e);
         }
     }     
