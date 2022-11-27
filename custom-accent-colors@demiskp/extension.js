@@ -85,7 +85,7 @@ class Extension {
             _str = null;
         }
         update_gtk4_theming(_accentColor);
-        if (this._settings.get_boolean('theme-gtk3') == true) {
+        if (this._settings.get_boolean('theme-flatpak') == true) {
             update_flatpak_theming(this._settings.get_boolean('theme-flatpak'));
         }
         if (this._settings.get_boolean('theme-gtk3') == true) {
