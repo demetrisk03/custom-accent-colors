@@ -36,72 +36,58 @@ class Extension {
     enable() {
         this._settings = ExtensionUtils.getSettings(
             'org.gnome.shell.extensions.custom-accent-colors');
-        
         let _accentColor = this._settings.get_string('accent-color');
         let _str;
-        
+
+
         this._handlerAccentColor = this._settings.connect('changed::accent-color', () => {
             _accentColor = this._settings.get_string('accent-color');
             update_gtk4_theming(_accentColor);
             if (this._settings.get_boolean('theme-gtk3') == true) {
-                update_gtk3_theming(this._settings.get_boolean('theme-gtk3'),
-                    _accentColor);
+                update_gtk3_theming(
+                    this._settings.get_boolean('theme-gtk3'), _accentColor);
             }
             if (this._settings.get_boolean('theme-shell') == true) {
-                update_shell_theming(this._settings.get_boolean('theme-shell'),
-                    _accentColor);
+                update_shell_theming(
+                    this._settings.get_boolean('theme-shell'), _accentColor);
             }
         });
+
         this._handlerFlatpak = this._settings.connect('changed::theme-flatpak', () => {
             update_flatpak_theming(this._settings.get_boolean('theme-flatpak'));
         });
+
         this._handlerGTK3 = this._settings.connect('changed::theme-gtk3', () => {
             if (this._settings.get_boolean('theme-gtk3') == true) {
-                try {
-                    _str = read_file(HomeDir + '/.config/gtk-3.0/gtk.css');
-                    if (_str != read_file(MeDir + '/resources/' + _accentColor + '/gtk.css')) {
-                        write_file(_str, HomeDir +
-                            '/.config/gtk-3.0/gtk.pre-custom-accent-colors.css');
-                    }
-                } catch (e) {
-                    _str = null;
-                }
+                backup_user_config('gtk-3.0', _accentColor);
             }
-            update_gtk3_theming(this._settings.get_boolean('theme-gtk3'), _accentColor);
-        });
-        this._handlerShell = this._settings.connect('changed::theme-shell', () => {
-            if (this._settings.get_boolean('theme-shell') == true) {
-                create_file_dir(HomeDir + '/.local/share/themes/CustomAccentColors/gnome-shell');
-            }
-            update_shell_theming(this._settings.get_boolean('theme-shell'), _accentColor);
+            update_gtk3_theming(
+                this._settings.get_boolean('theme-gtk3'), _accentColor);
         });
 
-        try {
-            _str = read_file(HomeDir + '/.config/gtk-4.0/gtk.css');
-            if (_str != read_file(MeDir + '/resources/' + _accentColor + '/gtk.css')) {
-                write_file(_str, HomeDir + '/.config/gtk-4.0/gtk.pre-custom-accent-colors.css');
+        this._handlerShell = this._settings.connect('changed::theme-shell', () => {
+            if (this._settings.get_boolean('theme-shell') == true) {
+                create_file_dir(HomeDir +
+                    '/.local/share/themes/CustomAccentColors/gnome-shell');
             }
-        } catch (e) {
-            _str = null;
-        }
+            update_shell_theming(
+                this._settings.get_boolean('theme-shell'), _accentColor);
+        });
+
+
+        backup_user_config('gtk-4.0', _accentColor);
         update_gtk4_theming(_accentColor);
         if (this._settings.get_boolean('theme-flatpak') == true) {
             update_flatpak_theming(this._settings.get_boolean('theme-flatpak'));
         }
         if (this._settings.get_boolean('theme-gtk3') == true) {
-            try {
-                _str = read_file(HomeDir + '/.config/gtk-3.0/gtk.css');
-                if (_str != read_file(MeDir + '/resources/' + _accentColor + '/gtk.css')) {
-                    write_file(_str,
-                        HomeDir + '/.config/gtk-3.0/gtk.pre-custom-accent-colors.css');
-                }
-            } catch (e) {
-                _str = null;
-            }
-            update_gtk3_theming(this._settings.get_boolean('theme-gtk3'), _accentColor);
+            backup_user_config('gtk-3.0', _accentColor);
+            update_gtk3_theming(
+                this._settings.get_boolean('theme-gtk3'), _accentColor);
         }
         if (this._settings.get_boolean('theme-shell') == true) {
-            update_shell_theming(this._settings.get_boolean('theme-shell'), _accentColor);
+            update_shell_theming(
+                this._settings.get_boolean('theme-shell'), _accentColor);
         }
     }
 
@@ -115,7 +101,6 @@ class Extension {
             delete_file_dir(HomeDir +
                 '/.config/gtk-4.0/gtk.pre-custom-accent-colors.css');
         } catch (e) {
-            _str = null;
             delete_file_dir(HomeDir + '/.config/gtk-4.0/gtk.css');
         }
         if (this._settings.get_boolean('theme-flatpak') == true) {
@@ -141,7 +126,6 @@ class Extension {
                 delete_file_dir(HomeDir +
                     '/.config/gtk-3.0/gtk.pre-custom-accent-colors.css');
             } catch (e) {
-                _str = null;
                 delete_file_dir(HomeDir + '/.config/gtk-3.0/gtk.css');
             }
         }
@@ -212,6 +196,18 @@ async function delete_file_dir(path) {
         });
     } catch (e) {
         log(e);
+    }
+}
+
+function backup_user_config(dir, accentcolor) {
+    try {
+        const str = read_file(HomeDir + '/.config/' + dir + '/gtk.css');
+        if (str != read_file(MeDir + '/resources/' + accentcolor + '/gtk.css')) {
+            write_file(str, HomeDir + '/.config/' +
+                dir + '/gtk.pre-custom-accent-colors.css');
+        }
+    } catch (e) {
+        return;
     }
 }
 
