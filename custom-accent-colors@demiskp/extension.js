@@ -146,15 +146,6 @@ class Extension {
                 delete_file_dir(HomeDir + '/.config/gtk-3.0/gtk.css');
             }
         }
-        if (this._settings.get_boolean('theme-shell') == true) {
-            delete_file_dir(HomeDir +
-                '/.local/share/themes/CustomAccentColors/gnome-shell/toggle-on.svg');
-            delete_file_dir(HomeDir +
-                '/.local/share/themes/CustomAccentColors/gnome-shell/gnome-shell.css');
-            delete_file_dir(HomeDir +
-                '/.local/share/themes/CustomAccentColors/gnome-shell');
-            delete_file_dir(HomeDir + '/.local/share/themes/CustomAccentColors');
-        }
         
         if (this._handlerAccentColor) {
             this._settings.disconnect(this._handlerAccentColor);
