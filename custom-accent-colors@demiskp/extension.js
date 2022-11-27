@@ -272,8 +272,6 @@ function update_gtk3_theming(themeit, accentcolor) {
             write_file(str, HomeDir + '/.config/gtk-3.0/gtk.css');
             delete_file_dir(HomeDir +
                 '/.config/gtk-3.0/gtk.pre-custom-accent-colors.css');
-            delete_file_dir(HomeDir +
-                '/.local/share/themes/CustomAccentColors/gnome-shell/toggle-on.svg');
         } catch (e) {
             delete_file_dir(HomeDir + '/.config/gtk-3.0/gtk.css');
         }
