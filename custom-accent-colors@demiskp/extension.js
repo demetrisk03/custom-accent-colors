@@ -101,7 +101,6 @@ class Extension {
             update_gtk3_theming(this._settings.get_boolean('theme-gtk3'), _accentColor);
         }
         if (this._settings.get_boolean('theme-shell') == true) {
-            create_file_dir(HomeDir + '/.local/share/themes/CustomAccentColors/gnome-shell');
             update_shell_theming(this._settings.get_boolean('theme-shell'), _accentColor);
         }
     }
