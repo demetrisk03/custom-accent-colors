@@ -174,8 +174,8 @@ function read_file(path) {
 
 function write_file(str, path) {
     const file = Gio.File.new_for_path(path);
-    const [, etag] = file.replace_contents(str, null, false,
-        Gio.FileCreateFlags.REPLACE_DESTINATION, null);
+    const [, etag] = file.replace_contents(
+        str, null, false, Gio.FileCreateFlags.REPLACE_DESTINATION, null);
 }
 
 async function delete_file_dir(path) {
@@ -203,8 +203,8 @@ function backup_user_config(dir, accentcolor) {
     try {
         const str = read_file(HomeDir + '/.config/' + dir + '/gtk.css');
         if (str != read_file(MeDir + '/resources/' + accentcolor + '/gtk.css')) {
-            write_file(str, HomeDir + '/.config/' +
-                dir + '/gtk.pre-custom-accent-colors.css');
+            write_file(str, HomeDir +
+                '/.config/' + dir + '/gtk.pre-custom-accent-colors.css');
         }
     } catch (e) {
         return;
