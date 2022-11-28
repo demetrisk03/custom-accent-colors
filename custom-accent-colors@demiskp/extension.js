@@ -106,13 +106,7 @@ class Extension {
         if (this._settings.get_boolean('theme-flatpak') == true) {
             try {
                 GLib.spawn_command_line_async(
-                    'flatpak override --user --nofilesystem=xdg-config/gtk-3.0');
-            } catch (e) {
-                logError(e);
-            }
-            try {
-                GLib.spawn_command_line_async(
-                    'flatpak override --user --nofilesystem=xdg-config/gtk-4.0');
+                    'flatpak override --user --nofilesystem=xdg-config/gtk-3.0 --user --nofilesystem=xdg-config/gtk-4.0');
             } catch (e) {
                 logError(e);
             }
@@ -221,26 +215,14 @@ function update_flatpak_theming(themeit) {
     if (themeit == true) {
         try {
             GLib.spawn_command_line_async(
-                'flatpak override --user --filesystem=xdg-config/gtk-3.0:ro');
-        } catch (e) {
-            logError(e);
-        }
-        try {
-            GLib.spawn_command_line_async(
-                'flatpak override --user --filesystem=xdg-config/gtk-4.0:ro');
+                'flatpak override --user --filesystem=xdg-config/gtk-3.0:ro --user --filesystem=xdg-config/gtk-4.0:ro');
         } catch (e) {
             logError(e);
         }
     } else {
           try {
             GLib.spawn_command_line_async(
-                'flatpak override --user --nofilesystem=xdg-config/gtk-3.0');
-        } catch (e) {
-            logError(e);
-        }
-        try {
-            GLib.spawn_command_line_async(
-                'flatpak override --user --nofilesystem=xdg-config/gtk-4.0');
+                'flatpak override --user --nofilesystem=xdg-config/gtk-3.0 --user --nofilesystem=xdg-config/gtk-4.0');
         } catch (e) {
             logError(e);
         }
