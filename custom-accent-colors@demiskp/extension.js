@@ -159,17 +159,28 @@ function create_file_dir(path) {
 
 function read_file(path) {
     const file = Gio.File.new_for_path(path);
-    const [, contents, etag] = file.load_contents(null);
-    const decoder = new TextDecoder('utf-8');
-    const contentsString = decoder.decode(contents);
-
-    return contentsString;
+    try {
+        const [, contents, etag] = file.load_contents(null);
+        const decoder = new TextDecoder('utf-8');
+        const contentsString = decoder.decode(contents);
+        return contentsString;
+    } catch (e) {
+        log(e);
+    }
 }
 
 function write_file(str, path) {
     const file = Gio.File.new_for_path(path);
-    const [, etag] = file.replace_contents(
-        str, null, false, Gio.FileCreateFlags.REPLACE_DESTINATION, null);
+    try {
+        const [, etag] = file.replace_contents(
+            str, null, false, Gio.FileCreateFlags.REPLACE_DESTINATION, null);
+    } catch (e) {
+        log(e);
+        create_file_dir(HomeDir +
+            '/.local/share/themes/CustomAccentColors/gnome-shell');
+        const [, etag] = file.replace_contents(
+            str, null, false, Gio.FileCreateFlags.REPLACE_DESTINATION, null);
+    }
 }
 
 async function delete_file_dir(path) {
