@@ -66,6 +66,10 @@ class Extension {
         });
 
         this._handlerShell = this._settings.connect('changed::theme-shell', () => {
+            if (this._settings.get_boolean('theme-shell') == true) {
+                create_file_dir(HomeDir +
+                    '/.local/share/themes/CustomAccentColors/gnome-shell');
+            }
             update_shell_theming(
                 this._settings.get_boolean('theme-shell'), _accentColor);
         });
