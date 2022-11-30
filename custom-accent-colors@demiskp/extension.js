@@ -66,14 +66,14 @@ class Extension {
         });
 
         this._handlerShell = this._settings.connect('changed::theme-shell', () => {
-            if (this._settings.get_boolean('theme-shell') == true) {
-                create_file_dir(HomeDir +
-                    '/.local/share/themes/CustomAccentColors/gnome-shell');
-            }
             update_shell_theming(
                 this._settings.get_boolean('theme-shell'), _accentColor);
         });
-
+        
+        create_file_dir(HomeDir +'/.config/gtk-4.0');
+        create_file_dir(HomeDir + '/.config/gtk-3.0');
+        create_file_dir(HomeDir +
+            '/.local/share/themes/CustomAccentColors/gnome-shell');
 
         backup_user_config('gtk-4.0', _accentColor);
         update_gtk4_theming(_accentColor);
@@ -153,35 +153,26 @@ function create_file_dir(path) {
     try {
         file.make_directory_with_parents(null);
     } catch (e) {
-        log(e);
+        return;
     }
 }
 
 function read_file(path) {
     const file = Gio.File.new_for_path(path);
-    try {
-        const [, contents, etag] = file.load_contents(null);
-        const decoder = new TextDecoder('utf-8');
-        const contentsString = decoder.decode(contents);
-        return contentsString;
-    } catch (e) {
-        log(e);
-    }
+    const [, contents, etag] = file.load_contents(null);
+    const decoder = new TextDecoder('utf-8');
+    const contentsString = decoder.decode(contents);
+
+    return contentsString;
 }
 
 function write_file(str, path) {
-    const file = Gio.File.new_for_path(path);
     try {
+        const file = Gio.File.new_for_path(path);
         const [, etag] = file.replace_contents(
             str, null, false, Gio.FileCreateFlags.REPLACE_DESTINATION, null);
     } catch (e) {
-        log(e);
-        create_file_dir(HomeDir + '/.config/gtk-4.0');
-        create_file_dir(HomeDir + '/.config/gtk-3.0');
-        create_file_dir(HomeDir +
-            '/.local/share/themes/CustomAccentColors/gnome-shell');
-        const [, etag] = file.replace_contents(
-            str, null, false, Gio.FileCreateFlags.REPLACE_DESTINATION, null);
+        return;
     }
 }
 
@@ -202,7 +193,7 @@ async function delete_file_dir(path) {
             );
         });
     } catch (e) {
-        log(e);
+        return;
     }
 }
 
