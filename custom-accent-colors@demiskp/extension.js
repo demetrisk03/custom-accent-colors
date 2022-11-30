@@ -176,6 +176,8 @@ function write_file(str, path) {
             str, null, false, Gio.FileCreateFlags.REPLACE_DESTINATION, null);
     } catch (e) {
         log(e);
+        create_file_dir(HomeDir + '/.config/gtk-4.0');
+        create_file_dir(HomeDir + '/.config/gtk-3.0');
         create_file_dir(HomeDir +
             '/.local/share/themes/CustomAccentColors/gnome-shell');
         const [, etag] = file.replace_contents(
