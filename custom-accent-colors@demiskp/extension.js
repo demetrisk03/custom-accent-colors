@@ -97,14 +97,14 @@ class Extension {
 
     disable() {
         let _str;
-        try {
-            _str = read_file(HomeDir +
-                '/.config/gtk-4.0/gtk.pre-custom-accent-colors.css');
+        _str = read_file(HomeDir +
+            '/.config/gtk-4.0/gtk.pre-custom-accent-colors.css');
+        if (_str != null) {    
             write_file(_str, HomeDir +
                 '/.config/gtk-4.0/gtk.css');
             delete_file_dir(HomeDir +
                 '/.config/gtk-4.0/gtk.pre-custom-accent-colors.css');
-        } catch (e) {
+        } else {
             delete_file_dir(HomeDir + '/.config/gtk-4.0/gtk.css');
         }
         if (this._settings.get_boolean('theme-flatpak') == true) {
@@ -116,14 +116,14 @@ class Extension {
             }
         }
         if (this._settings.get_boolean('theme-gtk3') == true) {
-            try {
-                _str = read_file(HomeDir +
-                    '/.config/gtk-3.0/gtk.pre-custom-accent-colors.css');
+            _str = read_file(HomeDir +
+                '/.config/gtk-3.0/gtk.pre-custom-accent-colors.css');
+            if (_str != null) {
                 write_file(_str, HomeDir +
                     '/.config/gtk-3.0/gtk.css');
                 delete_file_dir(HomeDir +
                     '/.config/gtk-3.0/gtk.pre-custom-accent-colors.css');
-            } catch (e) {
+            } else {
                 delete_file_dir(HomeDir + '/.config/gtk-3.0/gtk.css');
             }
         }
@@ -162,12 +162,15 @@ function create_file_dir(path) {
 }
 
 function read_file(path) {
-    const file = Gio.File.new_for_path(path);
-    const [, contents, etag] = file.load_contents(null);
-    const decoder = new TextDecoder('utf-8');
-    const contentsString = decoder.decode(contents);
-
-    return contentsString;
+    try {
+        const file = Gio.File.new_for_path(path);
+        const [, contents, etag] = file.load_contents(null);
+        const decoder = new TextDecoder('utf-8');
+        const contentsString = decoder.decode(contents);
+        return contentsString;
+    } catch (e) {
+        return null;
+    }
 }
 
 function write_file(str, path) {
@@ -242,13 +245,14 @@ function update_gtk3_theming(themeit, accentcolor) {
         const theme = read_file(MeDir + '/resources/' + accentcolor + '/gtk.css');
         write_file(theme, HomeDir + '/.config/gtk-3.0/gtk.css');
     } else {
-        try {
-            const str = read_file(HomeDir +
-                '/.config/gtk-3.0/gtk.pre-custom-accent-colors.css');
-            write_file(str, HomeDir + '/.config/gtk-3.0/gtk.css');
+        const str = read_file(HomeDir +
+            '/.config/gtk-3.0/gtk.pre-custom-accent-colors.css');
+        if (str != null) {
+            write_file(str, HomeDir +
+                '/.config/gtk-3.0/gtk.css');
             delete_file_dir(HomeDir +
                 '/.config/gtk-3.0/gtk.pre-custom-accent-colors.css');
-        } catch (e) {
+        } else {
             delete_file_dir(HomeDir + '/.config/gtk-3.0/gtk.css');
         }
     }  

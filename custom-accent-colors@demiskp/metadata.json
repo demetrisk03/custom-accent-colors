@@ -2,7 +2,7 @@
   "name": "Custom Accent Colors",
   "description": "Custom Accent Color support for GTK4/GTK3 apps and the Gnome Shell.",
   "uuid": "custom-accent-colors@demiskp",
-  "version": 3,
+  "version": 4,
   "shell-version": [
     "43"
   ],
