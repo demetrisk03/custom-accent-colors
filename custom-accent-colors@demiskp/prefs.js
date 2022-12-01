@@ -54,7 +54,7 @@ class AccentColorSupportPrefsWidget extends Adw.PreferencesPage {
         listModel.append(new ListAccentColor('Gray', 'gray'));
         this.mainRow = new Adw.ComboRow({
             title: 'Accent Color',
-            subtitle: 'Requires a Shell reload to activate properly.',
+            subtitle: 'Requires Log Out to activate properly.',
             model: listModel,
             expression: new Gtk.PropertyExpression(ListAccentColor, null, 'name'),
         });
