@@ -42,12 +42,10 @@ class Extension {
             _accentColor = this._settings.get_string('accent-color');
             update_gtk_theming('gtk-4.0', true, _accentColor);
             if (this._settings.get_boolean('theme-gtk3') == true) {
-                update_gtk_theming(
-                    'gtk-3.0', this._settings.get_boolean('theme-gtk3'), _accentColor);
+                update_gtk_theming('gtk-3.0', true, _accentColor);
             }
             if (this._settings.get_boolean('theme-shell') == true) {
-                update_shell_theming(
-                    this._settings.get_boolean('theme-shell'), _accentColor);
+                update_shell_theming(true, _accentColor);
             }
         });
 
@@ -84,15 +82,13 @@ class Extension {
 
     disable() {
         update_gtk_theming('gtk-4.0', false, ' ');
-
         if (this._settings.get_boolean('theme-flatpak') == true) {
             update_flatpak_theming(false);
         }
-
         if (this._settings.get_boolean('theme-gtk3') == true) {
             update_gtk_theming('gtk-3.0', false, ' ');
         }
-        
+
         if (this._handlerAccentColor) {
             this._settings.disconnect(this._handlerAccentColor);
             this._handlerAccentColor = null;
