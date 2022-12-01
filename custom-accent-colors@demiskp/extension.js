@@ -205,14 +205,10 @@ async function delete_file_dir(path) {
 }
 
 function backup_user_config(dir, accentcolor) {
-    try {
-        let str = read_file(HomeDir + '/.config/' + dir + '/gtk.css');
-        if (str != null && str != read_file(MeDir + '/resources/' + accentcolor + '/gtk.css')) {
-            write_file(str, HomeDir +
-                '/.config/' + dir + '/gtk.pre-custom-accent-colors.css');
-        }
-    } catch (e) {
-        return;
+    let str = read_file(HomeDir + '/.config/' + dir + '/gtk.css');
+    if (str != null && str != read_file(MeDir + '/resources/' + accentcolor + '/gtk.css')) {
+        write_file(str, HomeDir +
+            '/.config/' + dir + '/gtk.pre-custom-accent-colors.css');
     }
 }
 
