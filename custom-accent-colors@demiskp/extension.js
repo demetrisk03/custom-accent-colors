@@ -59,6 +59,7 @@ class Extension {
 
         this._handlerGTK3 = this._settings.connect('changed::theme-gtk3', () => {
             if (this._settings.get_boolean('theme-gtk3') == true) {
+                create_file_dir(HomeDir + '/.config/gtk-3.0');
                 backup_user_config('gtk-3.0', _accentColor);
             }
             update_gtk3_theming(
@@ -73,23 +74,22 @@ class Extension {
             update_shell_theming(
                 this._settings.get_boolean('theme-shell'), _accentColor);
         });
-        
+   
         create_file_dir(HomeDir +'/.config/gtk-4.0');
-        create_file_dir(HomeDir + '/.config/gtk-3.0');
-        create_file_dir(HomeDir +
-            '/.local/share/themes/CustomAccentColors/gnome-shell');
-
         backup_user_config('gtk-4.0', _accentColor);
         update_gtk4_theming(_accentColor);
         if (this._settings.get_boolean('theme-flatpak') == true) {
             update_flatpak_theming(this._settings.get_boolean('theme-flatpak'));
         }
         if (this._settings.get_boolean('theme-gtk3') == true) {
+            create_file_dir(HomeDir + '/.config/gtk-3.0');
             backup_user_config('gtk-3.0', _accentColor);
             update_gtk3_theming(
                 this._settings.get_boolean('theme-gtk3'), _accentColor);
         }
         if (this._settings.get_boolean('theme-shell') == true) {
+            create_file_dir(HomeDir +
+                '/.local/share/themes/CustomAccentColors/gnome-shell');
             update_shell_theming(
                 this._settings.get_boolean('theme-shell'), _accentColor);
         }
