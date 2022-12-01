@@ -245,7 +245,7 @@ function update_gtk3_theming(themeit, accentcolor) {
         const theme = read_file(MeDir + '/resources/' + accentcolor + '/gtk.css');
         write_file(theme, HomeDir + '/.config/gtk-3.0/gtk.css');
     } else {
-        const str = read_file(HomeDir +
+        let str = read_file(HomeDir +
             '/.config/gtk-3.0/gtk.pre-custom-accent-colors.css');
         if (str != null) {
             write_file(str, HomeDir +
