@@ -40,10 +40,10 @@ class Extension {
 
         this._handlerAccentColor = this._settings.connect('changed::accent-color', () => {
             _accentColor = this._settings.get_string('accent-color');
-            update_gtk4_theming(_accentColor);
+            update_gtk_theming('gtk-4.0', true, _accentColor);
             if (this._settings.get_boolean('theme-gtk3') == true) {
-                update_gtk3_theming(
-                    this._settings.get_boolean('theme-gtk3'), _accentColor);
+                update_gtk_theming(
+                    'gtk-3.0', this._settings.get_boolean('theme-gtk3'), _accentColor);
             }
             if (this._settings.get_boolean('theme-shell') == true) {
                 update_shell_theming(
@@ -59,8 +59,8 @@ class Extension {
             if (this._settings.get_boolean('theme-gtk3') == true) {
                 backup_user_config('gtk-3.0', _accentColor);
             }
-            update_gtk3_theming(
-                this._settings.get_boolean('theme-gtk3'), _accentColor);
+            update_gtk_theming(
+                'gtk-3.0', this._settings.get_boolean('theme-gtk3'), _accentColor);
         });
 
         this._handlerShell = this._settings.connect('changed::theme-shell', () => {
@@ -69,42 +69,28 @@ class Extension {
         });
 
         backup_user_config('gtk-4.0', _accentColor);
-        update_gtk4_theming(_accentColor);
-
+        update_gtk_theming('gtk-4.0', true, _accentColor);
         if (this._settings.get_boolean('theme-flatpak') == true) {
-            update_flatpak_theming(this._settings.get_boolean('theme-flatpak'));
+            update_flatpak_theming(true);
         }
-
         if (this._settings.get_boolean('theme-gtk3') == true) {
             backup_user_config('gtk-3.0', _accentColor);
-            update_gtk3_theming(
-                this._settings.get_boolean('theme-gtk3'), _accentColor);
+            update_gtk_theming('gtk-3.0', true, _accentColor);
         }
-
         if (this._settings.get_boolean('theme-shell') == true) {
-            update_shell_theming(
-                this._settings.get_boolean('theme-shell'), _accentColor);
+            update_shell_theming(true, _accentColor);
         }
     }
 
     disable() {
-        let _str = read_file(HomeDir +
-            '/.config/gtk-4.0/gtk.pre-custom-accent-colors.css');
-        if (_str != null) {    
-            write_file(_str, HomeDir +
-                '/.config/gtk-4.0/gtk.css');
-            delete_file_dir(HomeDir +
-                '/.config/gtk-4.0/gtk.pre-custom-accent-colors.css');
-        } else {
-            delete_file_dir(HomeDir + '/.config/gtk-4.0/gtk.css');
-        }
+        update_gtk_theming('gtk-4.0', false, ' ');
 
         if (this._settings.get_boolean('theme-flatpak') == true) {
             update_flatpak_theming(false);
         }
 
         if (this._settings.get_boolean('theme-gtk3') == true) {
-            update_gtk3_theming(false, ' ');
+            update_gtk_theming('gtk-3.0', false, ' ');
         }
         
         if (this._handlerAccentColor) {
@@ -191,10 +177,23 @@ function backup_user_config(dir, accentcolor) {
     }
 }
 
-function update_gtk4_theming(accentcolor) {
-    create_file_dir(HomeDir +'/.config/gtk-4.0');
-    let theme = read_file(MeDir + '/resources/' + accentcolor + '/gtk.css');
-    write_file(theme, HomeDir + '/.config/gtk-4.0/gtk.css');
+function update_gtk_theming(gtkversion, themeit, accentcolor) {
+    if (themeit == true) {
+        create_file_dir(HomeDir + '/.config/' + gtkversion);
+        let theme = read_file(MeDir + '/resources/' + accentcolor + '/gtk.css');
+        write_file(theme, HomeDir + '/.config/' + gtkversion + '/gtk.css');
+    } else {
+        let str = read_file(HomeDir +
+            '/.config/' + gtkversion + '/gtk.pre-custom-accent-colors.css');
+        if (str != null) {
+            write_file(str, HomeDir +
+                '/.config/' + gtkversion + '/gtk.css');
+            delete_file_dir(HomeDir +
+                '/.config/' + gtkversion + '/gtk.pre-custom-accent-colors.css');
+        } else {
+            delete_file_dir(HomeDir + '/.config/' + gtkversion + '/gtk.css');
+        }
+    }  
 }
 
 
@@ -214,25 +213,6 @@ function update_flatpak_theming(themeit) {
             logError(e);
         }
     }     
-}
-
-function update_gtk3_theming(themeit, accentcolor) {
-    if (themeit == true) {
-        create_file_dir(HomeDir + '/.config/gtk-3.0');
-        let theme = read_file(MeDir + '/resources/' + accentcolor + '/gtk.css');
-        write_file(theme, HomeDir + '/.config/gtk-3.0/gtk.css');
-    } else {
-        let str = read_file(HomeDir +
-            '/.config/gtk-3.0/gtk.pre-custom-accent-colors.css');
-        if (str != null) {
-            write_file(str, HomeDir +
-                '/.config/gtk-3.0/gtk.css');
-            delete_file_dir(HomeDir +
-                '/.config/gtk-3.0/gtk.pre-custom-accent-colors.css');
-        } else {
-            delete_file_dir(HomeDir + '/.config/gtk-3.0/gtk.css');
-        }
-    }  
 }
 
 function update_shell_theming(themeit, accentcolor) {
