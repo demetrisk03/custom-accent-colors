@@ -27,7 +27,6 @@ const Me = ExtensionUtils.getCurrentExtension();
 const MeDir = Me.dir.get_path();
 const HomeDir = GLib.get_home_dir();
 
-
 class Extension {
     constructor(uuid) {
         this._uuid = uuid;
@@ -191,7 +190,6 @@ function update_gtk_theming(gtkversion, themeit, accentcolor) {
         }
     }  
 }
-
 
 function update_flatpak_theming(themeit) {
     if (themeit == true) {
