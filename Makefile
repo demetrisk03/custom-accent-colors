@@ -1,4 +1,4 @@
-# Basic Makefile
+# Basic Makefile 
 
 build:
 	glib-compile-schemas --strict --targetdir=custom-accent-colors@demiskp/schemas/ custom-accent-colors@demiskp/schemas
