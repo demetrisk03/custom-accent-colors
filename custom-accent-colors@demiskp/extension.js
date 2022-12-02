@@ -35,16 +35,16 @@ class Extension {
     enable() {
         this._settings = ExtensionUtils.getSettings(
             'org.gnome.shell.extensions.custom-accent-colors');
-        let _accentColor = this._settings.get_string('accent-color');
+        this._accentColor = this._settings.get_string('accent-color');
 
         this._handlerAccentColor = this._settings.connect('changed::accent-color', () => {
-            _accentColor = this._settings.get_string('accent-color');
-            update_gtk_theming('gtk-4.0', true, _accentColor);
+            this._accentColor = this._settings.get_string('accent-color');
+            update_gtk_theming('gtk-4.0', true, this._accentColor);
             if (this._settings.get_boolean('theme-gtk3') == true) {
-                update_gtk_theming('gtk-3.0', true, _accentColor);
+                update_gtk_theming('gtk-3.0', true, this._accentColor);
             }
             if (this._settings.get_boolean('theme-shell') == true) {
-                update_shell_theming(true, _accentColor);
+                update_shell_theming(true, this._accentColor);
             }
         });
 
@@ -54,38 +54,38 @@ class Extension {
 
         this._handlerGTK3 = this._settings.connect('changed::theme-gtk3', () => {
             if (this._settings.get_boolean('theme-gtk3') == true) {
-                backup_user_config('gtk-3.0', _accentColor);
+                backup_user_config('gtk-3.0', this._accentColor);
             }
             update_gtk_theming(
-                'gtk-3.0', this._settings.get_boolean('theme-gtk3'), _accentColor);
+                'gtk-3.0', this._settings.get_boolean('theme-gtk3'), this._accentColor);
         });
 
         this._handlerShell = this._settings.connect('changed::theme-shell', () => {
             update_shell_theming(
-                this._settings.get_boolean('theme-shell'), _accentColor);
+                this._settings.get_boolean('theme-shell'), this._accentColor);
         });
 
-        backup_user_config('gtk-4.0', _accentColor);
-        update_gtk_theming('gtk-4.0', true, _accentColor);
+        backup_user_config('gtk-4.0', this._accentColor);
+        update_gtk_theming('gtk-4.0', true, this._accentColor);
         if (this._settings.get_boolean('theme-flatpak') == true) {
             update_flatpak_theming(true);
         }
         if (this._settings.get_boolean('theme-gtk3') == true) {
-            backup_user_config('gtk-3.0', _accentColor);
-            update_gtk_theming('gtk-3.0', true, _accentColor);
+            backup_user_config('gtk-3.0', this._accentColor);
+            update_gtk_theming('gtk-3.0', true, this._accentColor);
         }
         if (this._settings.get_boolean('theme-shell') == true) {
-            update_shell_theming(true, _accentColor);
+            update_shell_theming(true, this._accentColor);
         }
     }
 
     disable() {
-        update_gtk_theming('gtk-4.0', false, ' ');
+        update_gtk_theming('gtk-4.0', false, this._accentColor);
         if (this._settings.get_boolean('theme-flatpak') == true) {
             update_flatpak_theming(false);
         }
         if (this._settings.get_boolean('theme-gtk3') == true) {
-            update_gtk_theming('gtk-3.0', false, ' ');
+            update_gtk_theming('gtk-3.0', false, this._accentColor);
         }
 
         if (this._handlerAccentColor) {
