@@ -164,35 +164,35 @@ async function delete_file_dir(path) {
     }
 }
 
-function backup_user_config(dir, accentcolor) {
-    let str = read_file(HomeDir + '/.config/' + dir + '/gtk.css');
-    if (str != null && str != read_file(MeDir + '/resources/' + accentcolor + '/gtk.css')) {
+function backup_user_config(gtkDir, accentColor) {
+    let str = read_file(HomeDir + '/.config/' + gtkDir + '/gtk.css');
+    if (str != null && str != read_file(MeDir + '/resources/' + accentColor + '/gtk.css')) {
         write_file(str, HomeDir +
-            '/.config/' + dir + '/gtk.pre-custom-accent-colors.css');
+            '/.config/' + gtkDir + '/gtk.pre-custom-accent-colors.css');
     }
 }
 
-function update_gtk_theming(gtkversion, themeit, accentcolor) {
-    if (themeit == true) {
-        create_file_dir(HomeDir + '/.config/' + gtkversion);
-        let theme = read_file(MeDir + '/resources/' + accentcolor + '/gtk.css');
-        write_file(theme, HomeDir + '/.config/' + gtkversion + '/gtk.css');
+function update_gtk_theming(gtkDir, themeIt, accentColor) {
+    if (themeIt == true) {
+        create_file_dir(HomeDir + '/.config/' + gtkDir);
+        let theme = read_file(MeDir + '/resources/' + accentColor + '/gtk.css');
+        write_file(theme, HomeDir + '/.config/' + gtkDir + '/gtk.css');
     } else {
         let str = read_file(HomeDir +
-            '/.config/' + gtkversion + '/gtk.pre-custom-accent-colors.css');
+            '/.config/' + gtkDir + '/gtk.pre-custom-accent-colors.css');
         if (str != null) {
             write_file(str, HomeDir +
-                '/.config/' + gtkversion + '/gtk.css');
+                '/.config/' + gtkDir + '/gtk.css');
             delete_file_dir(HomeDir +
-                '/.config/' + gtkversion + '/gtk.pre-custom-accent-colors.css');
+                '/.config/' + gtkDir + '/gtk.pre-custom-accent-colors.css');
         } else {
-            delete_file_dir(HomeDir + '/.config/' + gtkversion + '/gtk.css');
+            delete_file_dir(HomeDir + '/.config/' + gtkDir + '/gtk.css');
         }
     }  
 }
 
-function update_flatpak_theming(themeit) {
-    if (themeit == true) {
+function update_flatpak_theming(themeIt) {
+    if (themeIt == true) {
         try {
             GLib.spawn_command_line_async(
                 'flatpak override --user --filesystem=xdg-config/gtk-3.0:ro --user --filesystem=xdg-config/gtk-4.0:ro');
@@ -209,16 +209,16 @@ function update_flatpak_theming(themeit) {
     }     
 }
 
-function update_shell_theming(themeit, accentcolor) {
-    if (themeit == true) {
+function update_shell_theming(themeIt, accentColor) {
+    if (themeIt == true) {
         create_file_dir(HomeDir +
             '/.local/share/themes/CustomAccentColors/gnome-shell');
         let theme = read_file(MeDir +
-            '/resources/' + accentcolor + '/gnome-shell/gnome-shell.css');
+            '/resources/' + accentColor + '/gnome-shell/gnome-shell.css');
         write_file(theme, HomeDir +
             '/.local/share/themes/CustomAccentColors/gnome-shell/gnome-shell.css');
         theme = read_file(MeDir +
-            '/resources/' + accentcolor + '/gnome-shell/toggle-on.svg');
+            '/resources/' + accentColor + '/gnome-shell/toggle-on.svg');
         write_file(theme, HomeDir +
             '/.local/share/themes/CustomAccentColors/gnome-shell/toggle-on.svg');
     } else {
