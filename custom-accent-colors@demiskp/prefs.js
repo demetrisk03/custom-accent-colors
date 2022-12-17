@@ -64,9 +64,9 @@ class AccentColorSupportPrefsWidget extends Adw.PreferencesPage {
             this._settings.set_string('accent-color', selectedItem.value);
         });
         this._settings.connect('changed::color', () => {
-            this._updateSelectedColor();
+            this._UpdateSelectedColor();
         });
-        this._updateSelectedColor();
+        this._UpdateSelectedColor();
 
         this._extraGroup = new Adw.PreferencesGroup({
             title: ('Extra Options'),
@@ -115,7 +115,7 @@ class AccentColorSupportPrefsWidget extends Adw.PreferencesPage {
         this._extraGroup.add(this._extraRow);
     }
 
-    _updateSelectedColor() {
+    _UpdateSelectedColor() {
         const _accentColor = this._settings.get_string('accent-color');
         const { model } = this._mainRow;
         for (let i = 0; i < model.get_n_items(); i++) {
