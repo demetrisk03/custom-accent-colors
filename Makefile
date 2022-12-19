@@ -9,6 +9,6 @@ install: $(GSCHEMAS)
 	install -d ~/.local/share/gnome-shell/extensions
 	cp -a ./custom-accent-colors@demiskp/ ~/.local/share/gnome-shell/extensions/
 
-clean: $(GSCHEMAS)
+clean:
 	rm -rf ~/.local/share/gnome-shell/extensions/custom-accent-colors@demiskp
 	rm -f $(GSCHEMAS)
