@@ -16,7 +16,7 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-const {Adw, Gio, GObject, Gtk} = imports.gi;
+const { Adw, Gio, GObject, Gtk } = imports.gi;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 
@@ -27,101 +27,94 @@ class AccentColorSupportPrefsWidget extends Adw.PreferencesPage {
     constructor() {
         super();
 
-        this._actionGroup = new Gio.SimpleActionGroup();
+        this.actionGroup = new Gio.SimpleActionGroup();
 
-        this._settings = ExtensionUtils.getSettings(
-            'org.gnome.shell.extensions.custom-accent-colors');
+        this.settings = ExtensionUtils.getSettings('org.gnome.shell.extensions.custom-accent-colors');
 
-        this._actionGroup.add_action(
-            this._settings.create_action('theme-flatpak'));
-        this._actionGroup.add_action(
-            this._settings.create_action('theme-gtk3'));
-        this._actionGroup.add_action(
-            this._settings.create_action('theme-shell'));
+        this.actionGroup.add_action(this.settings.create_action('theme-flatpak'));
+        this.actionGroup.add_action(this.settings.create_action('theme-gtk3'));
+        this.actionGroup.add_action(this.settings.create_action('theme-shell'));
 
-        this._mainGroup = new Adw.PreferencesGroup();
-        this.add(this._mainGroup);
+        this.mainGroup = new Adw.PreferencesGroup();
+        this.add(this.mainGroup);
         
-        const _listModel = new Gio.ListStore({ item_type: ListAccentColor });
-        _listModel.append(new ListAccentColor('Blue (Default)', 'blue'));
-        _listModel.append(new ListAccentColor('Green', 'green'));
-        _listModel.append(new ListAccentColor('Yellow', 'yellow'));
-        _listModel.append(new ListAccentColor('Orange', 'orange'));
-        _listModel.append(new ListAccentColor('Red', 'red'));
-        _listModel.append(new ListAccentColor('Magenta', 'magenta'));
-        _listModel.append(new ListAccentColor('Purple', 'purple'));
-        _listModel.append(new ListAccentColor('Brown', 'brown'));
-        _listModel.append(new ListAccentColor('Gray', 'gray'));
-        this._mainRow = new Adw.ComboRow({
+        const listModel = new Gio.ListStore({ item_type: ListAccentColor });
+        listModel.append(new ListAccentColor('Blue (Default)', 'blue'));
+        listModel.append(new ListAccentColor('Green', 'green'));
+        listModel.append(new ListAccentColor('Yellow', 'yellow'));
+        listModel.append(new ListAccentColor('Orange', 'orange'));
+        listModel.append(new ListAccentColor('Red', 'red'));
+        listModel.append(new ListAccentColor('Magenta', 'magenta'));
+        listModel.append(new ListAccentColor('Purple', 'purple'));
+        listModel.append(new ListAccentColor('Brown', 'brown'));
+        listModel.append(new ListAccentColor('Gray', 'gray'));
+        this.mainRow = new Adw.ComboRow({
             title: 'Accent Color',
             subtitle: 'Requires Log Out to activate properly.',
-            model: _listModel,
+            model: listModel,
             expression: new Gtk.PropertyExpression(ListAccentColor, null, 'name'),
         });
-        this._mainGroup.add(this._mainRow);
-        this._mainRow.connect('notify::selected-item', () => {
-            const { selectedItem } = this._mainRow;
-            this._settings.set_string('accent-color', selectedItem.value);
+        this.mainGroup.add(this.mainRow);
+        this.mainRow.connect('notify::selected-item', () => {
+            const { selectedItem } = this.mainRow;
+            this.settings.set_string('accent-color', selectedItem.value);
         });
-        this._settings.connect('changed::color', () => {
-            this._UpdateSelectedColor();
+        this.settings.connect('changed::color', () => {
+            this.UpdateSelectedColor();
         });
-        this._UpdateSelectedColor();
+        this.UpdateSelectedColor();
 
-        this._extraGroup = new Adw.PreferencesGroup({
+        this.extraGroup = new Adw.PreferencesGroup({
             title: ('Extra Options'),
         });
-        this.add(this._extraGroup);
+        this.add(this.extraGroup);
 
-        let _toggle = new Gtk.Switch({
+        let toggle = new Gtk.Switch({
             action_name: 'theme-flatpak',
             valign: Gtk.Align.CENTER,
         });
-        this._settings.bind('theme-flatpak',
-            _toggle, 'active', Gio.SettingsBindFlags.DEFAULT);
-        this._extraRow = new Adw.ActionRow({
+        this.settings.bind('theme-flatpak', toggle, 'active', Gio.SettingsBindFlags.DEFAULT);
+        this.extraRow = new Adw.ActionRow({
             title: ('Flatpak Theming'),
-            activatable_widget: _toggle,
+            activatable_widget: toggle,
         });
-        this._extraRow.add_suffix(_toggle);
-        this._extraGroup.add(this._extraRow);
+        this.extraRow.add_suffix(toggle);
+        this.extraGroup.add(this.extraRow);
 
-        _toggle = new Gtk.Switch({
+        toggle = new Gtk.Switch({
             action_name: 'theme-gtk3',
             valign: Gtk.Align.CENTER,
         });
-        this._settings.bind('theme-gtk3',
-            _toggle, 'active', Gio.SettingsBindFlags.DEFAULT);
-        this._extraRow = new Adw.ActionRow({
+        this.settings.bind('theme-gtk3', toggle, 'active', Gio.SettingsBindFlags.DEFAULT);
+        this.extraRow = new Adw.ActionRow({
             title: ('GTK3 Theming'),
             subtitle: ('Requires the "adw-gtk3" theme.'),
-            activatable_widget: _toggle,
+            activatable_widget: toggle,
         });
-        this._extraRow.add_suffix(_toggle);
-        this._extraGroup.add(this._extraRow);
+        this.extraRow.add_suffix(toggle);
+        this.extraGroup.add(this.extraRow);
         
-        _toggle = new Gtk.Switch({
+        toggle = new Gtk.Switch({
             action_name: 'theme-shell',
             valign: Gtk.Align.CENTER,
         });
-        this._settings.bind('theme-shell',
-            _toggle, 'active', Gio.SettingsBindFlags.DEFAULT);
-        this._extraRow = new Adw.ActionRow({
+        this.settings.bind('theme-shell', toggle, 'active', Gio.SettingsBindFlags.DEFAULT);
+        this.extraRow = new Adw.ActionRow({
             title: ('Shell Theming'),
             subtitle: ('Requires the Shell Theme to be set to "CustomAccentColors" with Gnome Tweaks.'),
-            activatable_widget: _toggle,
+            activatable_widget: toggle,
         });
-        this._extraRow.add_suffix(_toggle);
-        this._extraGroup.add(this._extraRow);
+        this.extraRow.add_suffix(toggle);
+        this.extraGroup.add(this.extraRow);
     }
 
-    _UpdateSelectedColor() {
-        const _accentColor = this._settings.get_string('accent-color');
-        const { model } = this._mainRow;
+    UpdateSelectedColor() {
+        const accentColor = this.settings.get_string('accent-color');
+        const { model } = this.mainRow;
         for (let i = 0; i < model.get_n_items(); i++) {
-            const _item = model.get_item(i);
-            if (_item.value === _accentColor) {
-                this._mainRow.set_selected(i);
+            const item = model.get_item(i);
+            if (item.value === accentColor) {
+                this.mainRow.set_selected(i);
                 break;
             }
         }
@@ -129,20 +122,15 @@ class AccentColorSupportPrefsWidget extends Adw.PreferencesPage {
 }
 
 const ListAccentColor = GObject.registerClass({
-      Properties: {
-          'name': GObject.ParamSpec.string(
-              'name', 'name', 'name',
-              GObject.ParamFlags.READWRITE,
-              null),
-          'value': GObject.ParamSpec.string(
-              'value', 'value', 'value',
-              GObject.ParamFlags.READWRITE,
-              null),
-      },
-}, class ListAccentColor extends GObject.Object {
-      _init(name, value) {
-          super._init({ name, value });
-      }
+    Properties: {
+        'name': GObject.ParamSpec.string('name', 'name', 'name', GObject.ParamFlags.READWRITE, null),
+        'value': GObject.ParamSpec.string('value', 'value', 'value', GObject.ParamFlags.READWRITE, null),
+    },
+},
+class ListAccentColor extends GObject.Object {
+    _init(name, value) {
+        super._init({ name, value });
+    }
 });
 
 function init() {
