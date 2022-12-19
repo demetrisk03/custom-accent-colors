@@ -48,6 +48,7 @@ class AccentColorSupportPrefsWidget extends Adw.PreferencesPage {
         listModel.append(new ListAccentColor('Purple', 'purple'));
         listModel.append(new ListAccentColor('Brown', 'brown'));
         listModel.append(new ListAccentColor('Gray', 'gray'));
+        listModel.append(new ListAccentColor('Black', 'black'));
         this.mainRow = new Adw.ComboRow({
             title: 'Accent Color',
             subtitle: 'Requires Log Out to activate properly.',
