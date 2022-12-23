@@ -108,8 +108,8 @@ function init() {
 }
 
 function CreateDir(path) {
-    const file = Gio.File.new_for_path(path);
     try {
+        const file = Gio.File.new_for_path(path);
         if (file.query_exists(null)) {
             return;
         }
