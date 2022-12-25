@@ -101,7 +101,7 @@ class AccentColorSupportPrefsWidget extends Adw.PreferencesPage {
         this.settings.bind('theme-shell', toggle, 'active', Gio.SettingsBindFlags.DEFAULT);
         this.extraRow = new Adw.ActionRow({
             title: ('Shell Theming'),
-            subtitle: ('Requires the Shell Theme to be set to "CustomAccentColors" with Gnome Tweaks.'),
+            subtitle: ('Requires the Shell Theme to be set to "CustomAccentColors".'),
             activatable_widget: toggle,
         });
         this.extraRow.add_suffix(toggle);
