@@ -20,10 +20,11 @@ const { Adw, Gio, GObject, Gtk } = imports.gi;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 
-class AccentColorSupportPrefsWidget extends Adw.PreferencesPage {
+class CustomAccentColorsPrefsWidget extends Adw.PreferencesPage {
     static {
         GObject.registerClass(this);
     }
+
     constructor() {
         super();
 
@@ -133,9 +134,8 @@ class ListAccentColor extends GObject.Object {
     }
 });
 
-function init() {
-}
+function init() { }
 
 function buildPrefsWidget() {
-    return new AccentColorSupportPrefsWidget();
+    return new CustomAccentColorsPrefsWidget();
 }
