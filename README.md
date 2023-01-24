@@ -6,5 +6,6 @@ You can install this extension from [extensions.gnome.org](https://extensions.gn
 
 ## Building
 
-Clone the repository or download the branch from github, a basic Makefile is included.<br/>
+Clone the repository or download the branch from github, a basic Makefile is included.
+
 Next use `make && make install` to install the extension into your home directory.
