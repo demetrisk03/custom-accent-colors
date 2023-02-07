@@ -167,7 +167,7 @@ async function deleteDirFile(path) {
 
 function backupUserConfig(gtkDir, accentColor) {
     const str = readFile(HomeDir + '/.config/' + gtkDir + '/gtk.css');
-    if (str !== readFile(MeDir + '/resources/' + accentColor + '/gtk.css')) {
+    if (str && str !== readFile(MeDir + '/resources/' + accentColor + '/gtk.css')) {
         writeFile(str, HomeDir + '/.config/' + gtkDir + '/gtk.pre-custom-accent-colors.css');
     }
 }
