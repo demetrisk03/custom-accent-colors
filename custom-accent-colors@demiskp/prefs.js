@@ -61,9 +61,9 @@ class CustomAccentColorsPrefsWidget extends Adw.PreferencesPage {
             this.settings.set_string('accent-color', selectedItem.value);
         });
         this.settings.connect('changed::color', () => {
-            this.UpdateSelectedColor();
+            this.updateSelectedColor();
         });
-        this.UpdateSelectedColor();
+        this.updateSelectedColor();
 
         this.extraGroup = new Adw.PreferencesGroup({
             title: ('Extra Options'),
@@ -109,7 +109,7 @@ class CustomAccentColorsPrefsWidget extends Adw.PreferencesPage {
         this.extraGroup.add(this.extraRow);
     }
 
-    UpdateSelectedColor() {
+    updateSelectedColor() {
         const accentColor = this.settings.get_string('accent-color');
         const { model } = this.mainRow;
         for (let i = 0; i < model.get_n_items(); i++) {
