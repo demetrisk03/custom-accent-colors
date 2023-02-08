@@ -107,12 +107,9 @@ function init() {
     return new Extension();
 }
 
-function createDir(path) {
+function createFile(path) {
     try {
         const file = Gio.File.new_for_path(path);
-        if (file.query_exists(null)) {
-            return;
-        }
         file.make_directory_with_parents(null);
     }
     catch(e) {
@@ -123,9 +120,6 @@ function createDir(path) {
 function readFile(path) {
     try {
         const file = Gio.File.new_for_path(path);
-        if (!file.query_exists(null)) {
-            return null;
-        }
         const [, contents, etag] = file.load_contents(null);
         const decoder = new TextDecoder('utf-8');
         const contentsString = decoder.decode(contents);
@@ -136,17 +130,26 @@ function readFile(path) {
     }
 }
 
-function writeFile(str, path) {
+async function writeFile(str, path) {
     try {
         const file = Gio.File.new_for_path(path);
-        const [, etag] = file.replace_contents(str, null, false, Gio.FileCreateFlags.REPLACE_DESTINATION, null);
+        await new Promise((resolve, reject) => {
+            file.replace_contents_bytes_async(new GLib.Bytes(str), null, false, Gio.FileCreateFlags.REPLACE_DESTINATION, null, (file_, result) => {
+                try {
+                    resolve(file.replace_contents_finish(result));
+                }
+                catch (e) {
+                    reject(e);
+                }
+            });
+        });
     }
     catch(e) {
         log(e);
     }
 }
 
-async function deleteDirFile(path) {
+async function deleteFile(path) {
     try {
         const file = Gio.File.new_for_path(path);
         await new Promise((resolve, reject) => {
@@ -165,33 +168,40 @@ async function deleteDirFile(path) {
     }
 }
 
-function backupUserConfig(gtkDir, accentColor) {
-    const str = readFile(HomeDir + '/.config/' + gtkDir + '/gtk.css');
-    if (str && str !== readFile(MeDir + '/resources/' + accentColor + '/gtk.css')) {
-        writeFile(str, HomeDir + '/.config/' + gtkDir + '/gtk.pre-custom-accent-colors.css');
+function backupUserConfig(gtkVer, accentColor) {
+    const gtkFile = Gio.File.new_for_path(HomeDir + '/.config/' + gtkVer + '/gtk.css');
+    if (gtkFile.query_exists(null)) {
+        const str = readFile(HomeDir + '/.config/' + gtkVer + '/gtk.css');
+        if (str !== readFile(MeDir + '/resources/' + accentColor + '/gtk.css')) {
+            writeFile(str, HomeDir + '/.config/' + gtkVer + '/gtk-pre-custom-accent-colors.css');
+        }
     }
 }
 
-function updateGtkTheming(gtkDir, themeIt, accentColor) {
-    if (themeIt) {
-        createDir(HomeDir + '/.config/' + gtkDir);
-        const theme = readFile(MeDir + '/resources/' + accentColor + '/gtk.css');
-        writeFile(theme, HomeDir + '/.config/' + gtkDir + '/gtk.css');
+function updateGtkTheming(gtkVer, apply, accentColor) {
+    if (apply) {
+        const gtkDir = Gio.File.new_for_path(HomeDir + '/.config/' + gtkVer);
+        if (!gtkDir.query_exists(null)) {
+            createFile(HomeDir + '/.config/' + gtkVer);
+        }
+        const str = readFile(MeDir + '/resources/' + accentColor + '/gtk.css');
+        writeFile(str, HomeDir + '/.config/' + gtkVer + '/gtk.css');
     }
     else {
-        const str = readFile(HomeDir + '/.config/' + gtkDir + '/gtk.pre-custom-accent-colors.css');
-        if (str) {
-            writeFile(str, HomeDir + '/.config/' + gtkDir + '/gtk.css');
-            deleteDirFile(HomeDir + '/.config/' + gtkDir + '/gtk.pre-custom-accent-colors.css');
+        const backupFile = Gio.File.new_for_path(HomeDir + '/.config/' + gtkVer + '/gtk-pre-custom-accent-colors.css');
+        if (backupFile.query_exists(null)) {
+            const str = readFile(HomeDir + '/.config/' + gtkVer + '/gtk-pre-custom-accent-colors.css');
+            writeFile(str, HomeDir + '/.config/' + gtkVer + '/gtk.css');
+            deleteFile(HomeDir + '/.config/' + gtkVer + '/gtk-pre-custom-accent-colors.css');
         }
         else {
-            deleteDirFile(HomeDir + '/.config/' + gtkDir + '/gtk.css');
+            deleteFile(HomeDir + '/.config/' + gtkVer + '/gtk.css');
         }
     }  
 }
 
-function updateFlatpakTheming(themeIt) {
-    if (themeIt) {
+function updateFlatpakTheming(apply) {
+    if (apply) {
         try {
             GLib.spawn_command_line_async('flatpak override --user --filesystem=xdg-config/gtk-3.0:ro --user --filesystem=xdg-config/gtk-4.0:ro');
         }
@@ -209,18 +219,21 @@ function updateFlatpakTheming(themeIt) {
     }
 }
 
-function updateShellTheming(themeIt, accentColor) {
-    if (themeIt) {
-        createDir(HomeDir + '/.local/share/themes/CustomAccentColors/gnome-shell');
-        let theme = readFile(MeDir + '/resources/' + accentColor + '/gnome-shell/gnome-shell.css');
-        writeFile(theme, HomeDir + '/.local/share/themes/CustomAccentColors/gnome-shell/gnome-shell.css');
-        theme = readFile(MeDir + '/resources/' + accentColor + '/gnome-shell/toggle-on.svg');
-        writeFile(theme, HomeDir + '/.local/share/themes/CustomAccentColors/gnome-shell/toggle-on.svg');
+function updateShellTheming(apply, accentColor) {
+    if (apply) {
+        const shellThemeDir = Gio.File.new_for_path(HomeDir + '/.local/share/themes/CustomAccentColors/gnome-shell');
+        if (!shellThemeDir.query_exists(null)) {
+            createFile(HomeDir + '/.local/share/themes/CustomAccentColors/gnome-shell');
+        }
+        let str = readFile(MeDir + '/resources/' + accentColor + '/gnome-shell/gnome-shell.css');
+        writeFile(str, HomeDir + '/.local/share/themes/CustomAccentColors/gnome-shell/gnome-shell.css');
+        str = readFile(MeDir + '/resources/' + accentColor + '/gnome-shell/toggle-on.svg');
+        writeFile(str, HomeDir + '/.local/share/themes/CustomAccentColors/gnome-shell/toggle-on.svg');
     }
     else {
-        deleteDirFile(HomeDir + '/.local/share/themes/CustomAccentColors/gnome-shell/gnome-shell.css');
-        deleteDirFile(HomeDir + '/.local/share/themes/CustomAccentColors/gnome-shell/toggle-on.svg');
-        deleteDirFile(HomeDir + '/.local/share/themes/CustomAccentColors/gnome-shell');
-        deleteDirFile(HomeDir + '/.local/share/themes/CustomAccentColors');
+        deleteFile(HomeDir + '/.local/share/themes/CustomAccentColors/gnome-shell/gnome-shell.css');
+        deleteFile(HomeDir + '/.local/share/themes/CustomAccentColors/gnome-shell/toggle-on.svg');
+        deleteFile(HomeDir + '/.local/share/themes/CustomAccentColors/gnome-shell');
+        deleteFile(HomeDir + '/.local/share/themes/CustomAccentColors');
     }
 }
