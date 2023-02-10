@@ -75,12 +75,12 @@ class Extension {
     }
 
     disable() {
-        updateGtkTheming('gtk-4.0', false, this.accentColor);
+        updateGtkTheming('gtk-4.0', false);
         if (this.settings.get_boolean('theme-flatpak')) {
             updateFlatpakTheming(false);
         }
         if (this.settings.get_boolean('theme-gtk3')) {
-            updateGtkTheming('gtk-3.0', false, this.accentColor);
+            updateGtkTheming('gtk-3.0', false);
         }
 
         if (this.handlerAccentColor) {
