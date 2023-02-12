@@ -1,24 +1,22 @@
-/* prefs.js
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * SPDX-License-Identifier: GPL-2.0-or-later
- */
+/* prefs.js */
+
+/* exported init buildPrefsWidget */
 
 const { Adw, Gio, GObject, Gtk } = imports.gi;
 
 const ExtensionUtils = imports.misc.extensionUtils;
+
+const CustomAccentColors = GObject.registerClass({
+    Properties: {
+        'name': GObject.ParamSpec.string('name', 'name', 'name', GObject.ParamFlags.READWRITE, null),
+        'value': GObject.ParamSpec.string('value', 'value', 'value', GObject.ParamFlags.READWRITE, null),
+    },
+},
+class CustomAccentColors extends GObject.Object {
+    _init(name, value) {
+        super._init({ name, value });
+    }
+});
 
 class CustomAccentColorsPrefsWidget extends Adw.PreferencesPage {
     static {
@@ -38,22 +36,22 @@ class CustomAccentColorsPrefsWidget extends Adw.PreferencesPage {
 
         this.mainGroup = new Adw.PreferencesGroup();
         this.add(this.mainGroup);
-        
-        const listModel = new Gio.ListStore({ item_type: ListAccentColor });
-        listModel.append(new ListAccentColor('Blue (Default)', 'blue'));
-        listModel.append(new ListAccentColor('Green', 'green'));
-        listModel.append(new ListAccentColor('Yellow', 'yellow'));
-        listModel.append(new ListAccentColor('Orange', 'orange'));
-        listModel.append(new ListAccentColor('Red', 'red'));
-        listModel.append(new ListAccentColor('Magenta', 'magenta'));
-        listModel.append(new ListAccentColor('Purple', 'purple'));
-        listModel.append(new ListAccentColor('Brown', 'brown'));
-        listModel.append(new ListAccentColor('Gray', 'gray'));
+
+        const listModel = new Gio.ListStore({ item_type: CustomAccentColors });
+        listModel.append(new CustomAccentColors('Blue (Default)', 'blue'));
+        listModel.append(new CustomAccentColors('Green', 'green'));
+        listModel.append(new CustomAccentColors('Yellow', 'yellow'));
+        listModel.append(new CustomAccentColors('Orange', 'orange'));
+        listModel.append(new CustomAccentColors('Red', 'red'));
+        listModel.append(new CustomAccentColors('Magenta', 'magenta'));
+        listModel.append(new CustomAccentColors('Purple', 'purple'));
+        listModel.append(new CustomAccentColors('Brown', 'brown'));
+        listModel.append(new CustomAccentColors('Gray', 'gray'));
         this.mainRow = new Adw.ComboRow({
             title: 'Accent Color',
             subtitle: 'Requires Log Out to activate properly.',
             model: listModel,
-            expression: new Gtk.PropertyExpression(ListAccentColor, null, 'name'),
+            expression: new Gtk.PropertyExpression(CustomAccentColors, null, 'name'),
         });
         this.mainGroup.add(this.mainRow);
         this.mainRow.connect('notify::selected-item', () => {
@@ -94,7 +92,7 @@ class CustomAccentColorsPrefsWidget extends Adw.PreferencesPage {
         });
         this.extraRow.add_suffix(toggle);
         this.extraGroup.add(this.extraRow);
-        
+
         toggle = new Gtk.Switch({
             action_name: 'theme-shell',
             valign: Gtk.Align.CENTER,
@@ -121,18 +119,6 @@ class CustomAccentColorsPrefsWidget extends Adw.PreferencesPage {
         }
     }
 }
-
-const ListAccentColor = GObject.registerClass({
-    Properties: {
-        'name': GObject.ParamSpec.string('name', 'name', 'name', GObject.ParamFlags.READWRITE, null),
-        'value': GObject.ParamSpec.string('value', 'value', 'value', GObject.ParamFlags.READWRITE, null),
-    },
-},
-class ListAccentColor extends GObject.Object {
-    _init(name, value) {
-        super._init({ name, value });
-    }
-});
 
 function init() { }
 
