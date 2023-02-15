@@ -223,10 +223,20 @@ class Extension {
             this.writeFile(str, HomeDir + '/.local/share/themes/custom-accent-colors/gnome-shell/gnome-shell.css');
             str = this.readFile(MeDir + '/resources/' + accentColor + '/gnome-shell/toggle-on.svg');
             this.writeFile(str, HomeDir + '/.local/share/themes/custom-accent-colors/gnome-shell/toggle-on.svg');
-            GLib.spawn_command_line_async(`dconf write /org/gnome/shell/extensions/user-theme/name "'custom-accent-colors'"`);
+            try {
+                GLib.spawn_command_line_async(`dconf write /org/gnome/shell/extensions/user-theme/name "'custom-accent-colors'"`);
+            }
+            catch(e) {
+                logError(e);
+            }
         }
         else {
-            GLib.spawn_command_line_async('dconf reset /org/gnome/shell/extensions/user-theme/name');
+            try {
+                GLib.spawn_command_line_async('dconf reset /org/gnome/shell/extensions/user-theme/name');
+            }
+            catch(e) {
+                logError(e);
+            }
             this.deleteFile(HomeDir + '/.local/share/themes/custom-accent-colors/gnome-shell/gnome-shell.css');
             this.deleteFile(HomeDir + '/.local/share/themes/custom-accent-colors/gnome-shell/toggle-on.svg');
             this.deleteFile(HomeDir + '/.local/share/themes/custom-accent-colors/gnome-shell');
