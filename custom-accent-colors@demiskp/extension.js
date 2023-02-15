@@ -78,6 +78,9 @@ class Extension {
         if (this.settings.get_boolean('theme-gtk3')) {
             this.updateGtkTheming('gtk-3.0', false);
         }
+        if (this.settings.get_boolean('theme-shell')) {
+            this.updateShellTheming(false);
+        }
 
         if (this.handlerAccentColor) {
             this.settings.disconnect(this.handlerAccentColor);
@@ -220,8 +223,10 @@ class Extension {
             this.writeFile(str, HomeDir + '/.local/share/themes/custom-accent-colors/gnome-shell/gnome-shell.css');
             str = this.readFile(MeDir + '/resources/' + accentColor + '/gnome-shell/toggle-on.svg');
             this.writeFile(str, HomeDir + '/.local/share/themes/custom-accent-colors/gnome-shell/toggle-on.svg');
+            GLib.spawn_command_line_async(`dconf write /org/gnome/shell/extensions/user-theme/name "'custom-accent-colors'"`);
         }
         else {
+            GLib.spawn_command_line_async('dconf reset /org/gnome/shell/extensions/user-theme/name');
             this.deleteFile(HomeDir + '/.local/share/themes/custom-accent-colors/gnome-shell/gnome-shell.css');
             this.deleteFile(HomeDir + '/.local/share/themes/custom-accent-colors/gnome-shell/toggle-on.svg');
             this.deleteFile(HomeDir + '/.local/share/themes/custom-accent-colors/gnome-shell');
