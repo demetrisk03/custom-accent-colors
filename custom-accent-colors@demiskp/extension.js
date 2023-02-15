@@ -194,7 +194,7 @@ class Extension {
     updateFlatpakTheming(apply) {
         if (apply) {
             try {
-                GLib.spawn_command_line_async('flatpak override --user --filesystem=xdg-config/gtk-3.0:ro --user --filesystem=xdg-config/gtk-4.0:ro');
+                GLib.spawn_command_line_async('flatpak override --user --filesystem=xdg-config/gtk-4.0:ro --filesystem=xdg-config/gtk-3.0:ro');
             }
             catch(e) {
                 logError(e);
@@ -202,7 +202,7 @@ class Extension {
         }
         else {
             try {
-                GLib.spawn_command_line_async('flatpak override --user --nofilesystem=xdg-config/gtk-3.0 --user --nofilesystem=xdg-config/gtk-4.0');
+                GLib.spawn_command_line_async('flatpak override --user --nofilesystem=xdg-config/gtk-4.0 --nofilesystem=xdg-config/gtk-3.0');
             }
             catch(e) {
                 logError(e);
