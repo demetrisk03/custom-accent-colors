@@ -212,20 +212,20 @@ class Extension {
 
     updateShellTheming(apply, accentColor) {
         if (apply) {
-            const shellThemeDir = Gio.File.new_for_path(HomeDir + '/.local/share/themes/Custom-Accent-Colors/gnome-shell');
+            const shellThemeDir = Gio.File.new_for_path(HomeDir + '/.local/share/themes/custom-accent-colors/gnome-shell');
             if (!shellThemeDir.query_exists(null)) {
-                this.createFile(HomeDir + '/.local/share/themes/Custom-Accent-Colors/gnome-shell');
+                this.createFile(HomeDir + '/.local/share/themes/custom-accent-colors/gnome-shell');
             }
             let str = this.readFile(MeDir + '/resources/' + accentColor + '/gnome-shell/gnome-shell.css');
-            this.writeFile(str, HomeDir + '/.local/share/themes/Custom-Accent-Colors/gnome-shell/gnome-shell.css');
+            this.writeFile(str, HomeDir + '/.local/share/themes/custom-accent-colors/gnome-shell/gnome-shell.css');
             str = this.readFile(MeDir + '/resources/' + accentColor + '/gnome-shell/toggle-on.svg');
-            this.writeFile(str, HomeDir + '/.local/share/themes/Custom-Accent-Colors/gnome-shell/toggle-on.svg');
+            this.writeFile(str, HomeDir + '/.local/share/themes/custom-accent-colors/gnome-shell/toggle-on.svg');
         }
         else {
-            this.deleteFile(HomeDir + '/.local/share/themes/Custom-Accent-Colors/gnome-shell/gnome-shell.css');
-            this.deleteFile(HomeDir + '/.local/share/themes/Custom-Accent-Colors/gnome-shell/toggle-on.svg');
-            this.deleteFile(HomeDir + '/.local/share/themes/Custom-Accent-Colors/gnome-shell');
-            this.deleteFile(HomeDir + '/.local/share/themes/Custom-Accent-Colors');
+            this.deleteFile(HomeDir + '/.local/share/themes/custom-accent-colors/gnome-shell/gnome-shell.css');
+            this.deleteFile(HomeDir + '/.local/share/themes/custom-accent-colors/gnome-shell/toggle-on.svg');
+            this.deleteFile(HomeDir + '/.local/share/themes/custom-accent-colors/gnome-shell');
+            this.deleteFile(HomeDir + '/.local/share/themes/custom-accent-colors');
         }
     }
 }
