@@ -212,20 +212,20 @@ class Extension {
 
     updateShellTheming(apply, accentColor) {
         if (apply) {
-            const shellThemeDir = Gio.File.new_for_path(HomeDir + '/.local/share/themes/CustomAccentColors/gnome-shell');
+            const shellThemeDir = Gio.File.new_for_path(HomeDir + '/.local/share/themes/Custom-Accent-Colors/gnome-shell');
             if (!shellThemeDir.query_exists(null)) {
-                this.createFile(HomeDir + '/.local/share/themes/CustomAccentColors/gnome-shell');
+                this.createFile(HomeDir + '/.local/share/themes/Custom-Accent-Colors/gnome-shell');
             }
             let str = this.readFile(MeDir + '/resources/' + accentColor + '/gnome-shell/gnome-shell.css');
-            this.writeFile(str, HomeDir + '/.local/share/themes/CustomAccentColors/gnome-shell/gnome-shell.css');
+            this.writeFile(str, HomeDir + '/.local/share/themes/Custom-Accent-Colors/gnome-shell/gnome-shell.css');
             str = this.readFile(MeDir + '/resources/' + accentColor + '/gnome-shell/toggle-on.svg');
-            this.writeFile(str, HomeDir + '/.local/share/themes/CustomAccentColors/gnome-shell/toggle-on.svg');
+            this.writeFile(str, HomeDir + '/.local/share/themes/Custom-Accent-Colors/gnome-shell/toggle-on.svg');
         }
         else {
-            this.deleteFile(HomeDir + '/.local/share/themes/CustomAccentColors/gnome-shell/gnome-shell.css');
-            this.deleteFile(HomeDir + '/.local/share/themes/CustomAccentColors/gnome-shell/toggle-on.svg');
-            this.deleteFile(HomeDir + '/.local/share/themes/CustomAccentColors/gnome-shell');
-            this.deleteFile(HomeDir + '/.local/share/themes/CustomAccentColors');
+            this.deleteFile(HomeDir + '/.local/share/themes/Custom-Accent-Colors/gnome-shell/gnome-shell.css');
+            this.deleteFile(HomeDir + '/.local/share/themes/Custom-Accent-Colors/gnome-shell/toggle-on.svg');
+            this.deleteFile(HomeDir + '/.local/share/themes/Custom-Accent-Colors/gnome-shell');
+            this.deleteFile(HomeDir + '/.local/share/themes/Custom-Accent-Colors');
         }
     }
 }
