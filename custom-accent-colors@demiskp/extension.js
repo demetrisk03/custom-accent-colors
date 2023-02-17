@@ -250,7 +250,9 @@ class Extension {
                 str,
                 HomeDir + '/.local/share/themes/Custom-Accent-Colors/gnome-shell/gnome-shell.css'
             );
-            str = this.readFile(MeDir + '/resources/' + this.accentColor + '/gnome-shell/toggle-on.svg');
+            str = this.readFile(
+                MeDir + '/resources/' + this.accentColor + '/gnome-shell/toggle-on.svg'
+            );
             this.writeFile(
                 str,
                 HomeDir + '/.local/share/themes/Custom-Accent-Colors/gnome-shell/toggle-on.svg'
