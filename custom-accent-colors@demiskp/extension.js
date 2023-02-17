@@ -169,7 +169,7 @@ class Extension {
     backupUserConfig(gtkVer, accentColor) {
         const gtkFile = Gio.File.new_for_path(HomeDir + '/.config/' + gtkVer + '/gtk.css');
         if (gtkFile.query_exists(null)) {
-            const str = this.readFile(HomeDir + '/.config/' + gtkVer + '/gtk.css');
+            const str = this.readFile(gtkFile.get_path());
             if (str !== this.readFile(MeDir + '/resources/' + accentColor + '/gtk.css')) {
                 this.writeFile(
                     str,
@@ -183,7 +183,7 @@ class Extension {
         if (apply) {
             const gtkDir = Gio.File.new_for_path(HomeDir + '/.config/' + gtkVer);
             if (!gtkDir.query_exists(null)) {
-                this.createFile(HomeDir + '/.config/' + gtkVer);
+                this.createFile(gtkDir.get_path());
             }
             const str = this.readFile(MeDir + '/resources/' + accentColor + '/gtk.css');
             this.writeFile(str, HomeDir + '/.config/' + gtkVer + '/gtk.css');
@@ -192,13 +192,9 @@ class Extension {
                 HomeDir + '/.config/' + gtkVer + '/gtk-pre-custom-accent-colors.css'
             );
             if (backupFile.query_exists(null)) {
-                const str = this.readFile(
-                    HomeDir + '/.config/' + gtkVer + '/gtk-pre-custom-accent-colors.css'
-                );
+                const str = this.readFile(backupFile.get_path());
                 this.writeFile(str, HomeDir + '/.config/' + gtkVer + '/gtk.css');
-                this.deleteFile(
-                    HomeDir + '/.config/' + gtkVer + '/gtk-pre-custom-accent-colors.css'
-                );
+                this.deleteFile(backupFile.get_path());
             } else {
                 this.deleteFile(HomeDir + '/.config/' + gtkVer + '/gtk.css');
             }
@@ -231,7 +227,7 @@ class Extension {
                 HomeDir + '/.local/share/themes/custom-accent-colors/gnome-shell'
             );
             if (!shellThemeDir.query_exists(null)) {
-                this.createFile(HomeDir + '/.local/share/themes/custom-accent-colors/gnome-shell');
+                this.createFile(shellThemeDir.get_path());
             }
             let str = this.readFile(
                 MeDir + '/resources/' + accentColor + '/gnome-shell/gnome-shell.css'
