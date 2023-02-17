@@ -84,9 +84,6 @@ class Extension {
         if (this.settings.get_boolean('theme-gtk3')) {
             this.updateGtkTheming('gtk-3.0', false);
         }
-        if (this.settings.get_boolean('theme-shell')) {
-            this.updateShellTheming(false);
-        }
 
         if (this.handlerAccentColor) {
             this.settings.disconnect(this.handlerAccentColor);
@@ -248,21 +245,7 @@ class Extension {
                 str,
                 HomeDir + '/.local/share/themes/custom-accent-colors/gnome-shell/toggle-on.svg'
             );
-            try {
-                GLib.spawn_command_line_async(
-                    `dconf write /org/gnome/shell/extensions/user-theme/name "'custom-accent-colors'"`
-                );
-            } catch (e) {
-                logError(e);
-            }
         } else {
-            try {
-                GLib.spawn_command_line_async(
-                    'dconf reset /org/gnome/shell/extensions/user-theme/name'
-                );
-            } catch (e) {
-                logError(e);
-            }
             this.deleteFile(
                 HomeDir + '/.local/share/themes/custom-accent-colors/gnome-shell/gnome-shell.css'
             );
