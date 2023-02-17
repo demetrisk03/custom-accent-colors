@@ -8,9 +8,21 @@ const ExtensionUtils = imports.misc.extensionUtils;
 
 const CustomAccentColors = GObject.registerClass({
     Properties: {
-        'name': GObject.ParamSpec.string('name', 'name', 'name', GObject.ParamFlags.READWRITE, null),
-        'value': GObject.ParamSpec.string('value', 'value', 'value', GObject.ParamFlags.READWRITE, null)
-    }
+        name: GObject.ParamSpec.string(
+            'name',
+            'name',
+            'name',
+            GObject.ParamFlags.READWRITE,
+            null
+        ),
+        value: GObject.ParamSpec.string(
+            'value',
+            'value',
+            'value',
+            GObject.ParamFlags.READWRITE,
+            null
+        ),
+    },
 },
 class CustomAccentColors extends GObject.Object {
     _init(name, value) {
@@ -28,7 +40,9 @@ class CustomAccentColorsPrefsWidget extends Adw.PreferencesPage {
 
         this.actionGroup = new Gio.SimpleActionGroup();
 
-        this.settings = ExtensionUtils.getSettings('org.gnome.shell.extensions.custom-accent-colors');
+        this.settings = ExtensionUtils.getSettings(
+            'org.gnome.shell.extensions.custom-accent-colors'
+        );
 
         this.actionGroup.add_action(this.settings.create_action('theme-flatpak'));
         this.actionGroup.add_action(this.settings.create_action('theme-gtk3'));
@@ -51,7 +65,7 @@ class CustomAccentColorsPrefsWidget extends Adw.PreferencesPage {
             title: 'Accent Color',
             subtitle: 'Requires Log Out to activate properly.',
             model: listModel,
-            expression: new Gtk.PropertyExpression(CustomAccentColors, null, 'name')
+            expression: new Gtk.PropertyExpression(CustomAccentColors, null, 'name'),
         });
         this.mainGroup.add(this.mainRow);
         this.mainRow.connect('notify::selected-item', () => {
@@ -64,44 +78,44 @@ class CustomAccentColorsPrefsWidget extends Adw.PreferencesPage {
         this.updateSelectedColor();
 
         this.extraGroup = new Adw.PreferencesGroup({
-            title: ('Extra Options')
+            title: 'Extra Options',
         });
         this.add(this.extraGroup);
 
         let toggle = new Gtk.Switch({
             action_name: 'theme-flatpak',
-            valign: Gtk.Align.CENTER
+            valign: Gtk.Align.CENTER,
         });
         this.settings.bind('theme-flatpak', toggle, 'active', Gio.SettingsBindFlags.DEFAULT);
         this.extraRow = new Adw.ActionRow({
-            title: ('Flatpak Theming'),
-            activatable_widget: toggle
+            title: 'Flatpak Theming',
+            activatable_widget: toggle,
         });
         this.extraRow.add_suffix(toggle);
         this.extraGroup.add(this.extraRow);
 
         toggle = new Gtk.Switch({
             action_name: 'theme-gtk3',
-            valign: Gtk.Align.CENTER
+            valign: Gtk.Align.CENTER,
         });
         this.settings.bind('theme-gtk3', toggle, 'active', Gio.SettingsBindFlags.DEFAULT);
         this.extraRow = new Adw.ActionRow({
-            title: ('GTK3 Theming'),
-            subtitle: ('Requires the "adw-gtk3" theme.'),
-            activatable_widget: toggle
+            title: 'GTK3 Theming',
+            subtitle: 'Requires the "adw-gtk3" theme.',
+            activatable_widget: toggle,
         });
         this.extraRow.add_suffix(toggle);
         this.extraGroup.add(this.extraRow);
 
         toggle = new Gtk.Switch({
             action_name: 'theme-shell',
-            valign: Gtk.Align.CENTER
+            valign: Gtk.Align.CENTER,
         });
         this.settings.bind('theme-shell', toggle, 'active', Gio.SettingsBindFlags.DEFAULT);
         this.extraRow = new Adw.ActionRow({
-            title: ('Shell Theming'),
-            subtitle: ('Requires the "User Themes" extension.'),
-            activatable_widget: toggle
+            title: 'Shell Theming',
+            subtitle: 'Requires the "User Themes" extension.',
+            activatable_widget: toggle,
         });
         this.extraRow.add_suffix(toggle);
         this.extraGroup.add(this.extraRow);
