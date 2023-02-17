@@ -238,7 +238,7 @@ class Extension {
             }
 
             shellThemeDir = Gio.File.new_for_path(
-                HomeDir + '/.local/share/themes/custom-accent-colors/gnome-shell'
+                HomeDir + '/.local/share/themes/Custom-Accent-Colors/gnome-shell'
             );
             if (!shellThemeDir.query_exists(null)) {
                 this.createFile(shellThemeDir.get_path());
@@ -248,22 +248,22 @@ class Extension {
             );
             this.writeFile(
                 str,
-                HomeDir + '/.local/share/themes/custom-accent-colors/gnome-shell/gnome-shell.css'
+                HomeDir + '/.local/share/themes/Custom-Accent-Colors/gnome-shell/gnome-shell.css'
             );
             str = this.readFile(MeDir + '/resources/' + this.accentColor + '/gnome-shell/toggle-on.svg');
             this.writeFile(
                 str,
-                HomeDir + '/.local/share/themes/custom-accent-colors/gnome-shell/toggle-on.svg'
+                HomeDir + '/.local/share/themes/Custom-Accent-Colors/gnome-shell/toggle-on.svg'
             );
         } else {
             this.deleteFile(
-                HomeDir + '/.local/share/themes/custom-accent-colors/gnome-shell/gnome-shell.css'
+                HomeDir + '/.local/share/themes/Custom-Accent-Colors/gnome-shell/gnome-shell.css'
             );
             this.deleteFile(
-                HomeDir + '/.local/share/themes/custom-accent-colors/gnome-shell/toggle-on.svg'
+                HomeDir + '/.local/share/themes/Custom-Accent-Colors/gnome-shell/toggle-on.svg'
             );
-            this.deleteFile(HomeDir + '/.local/share/themes/custom-accent-colors/gnome-shell');
-            this.deleteFile(HomeDir + '/.local/share/themes/custom-accent-colors');
+            this.deleteFile(HomeDir + '/.local/share/themes/Custom-Accent-Colors/gnome-shell');
+            this.deleteFile(HomeDir + '/.local/share/themes/Custom-Accent-Colors');
         }
     }
 }
