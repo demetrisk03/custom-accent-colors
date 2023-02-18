@@ -101,7 +101,7 @@ class CustomAccentColorsPrefsWidget extends Adw.PreferencesPage {
         this.settings.bind('theme-gtk3', toggle, 'active', Gio.SettingsBindFlags.DEFAULT);
         this.extraRow = new Adw.ActionRow({
             title: 'GTK3 Theming',
-            subtitle: 'Requires the "adw-gtk3" theme.',
+            subtitle: 'Requires the "adw-gtk3" Theme.',
             activatable_widget: toggle,
         });
         this.extraRow.add_suffix(toggle);
