@@ -33,42 +33,20 @@ class Extension {
             'org.gnome.shell.extensions.custom-accent-colors'
         );
 
-        this.accentColor = this.settings.get_string('accent-color');
-
-        this.handlerAccentColor = this.settings.connect('changed::accent-color', () => {
-            this.accentColor = this.settings.get_string('accent-color');
-            this.updateGtkTheming('gtk-4.0', true, this.accentColor);
-            if (this.settings.get_boolean('theme-gtk3')) {
-                this.updateGtkTheming('gtk-3.0', true, this.accentColor);
-            }
-            if (this.settings.get_boolean('theme-shell')) {
-                this.updateShellTheming(true, this.accentColor);
-            }
-        });
         this.handlerFlatpak = this.settings.connect('changed::theme-flatpak', () => {
             this.updateFlatpakTheming(this.settings.get_boolean('theme-flatpak'));
         });
         this.handlerGTK3 = this.settings.connect('changed::theme-gtk3', () => {
-            this.updateGtkTheming(
-                'gtk-3.0',
-                this.settings.get_boolean('theme-gtk3'),
-                this.accentColor
-            );
+            this.updateGtkTheming('gtk-3.0', this.settings.get_boolean('theme-gtk3'));
         });
         this.handlerShell = this.settings.connect('changed::theme-shell', () => {
-            this.updateShellTheming(this.settings.get_boolean('theme-shell'), this.accentColor);
+            this.updateShellTheming(this.settings.get_boolean('theme-shell'));
         });
 
-        this.updateGtkTheming('gtk-4.0', true, this.accentColor);
-        if (this.settings.get_boolean('theme-flatpak')) {
-            this.updateFlatpakTheming(true);
-        }
-        if (this.settings.get_boolean('theme-gtk3')) {
-            this.updateGtkTheming('gtk-3.0', true, this.accentColor);
-        }
-        if (this.settings.get_boolean('theme-shell')) {
-            this.updateShellTheming(true, this.accentColor);
-        }
+        this.handlerAccentColor = this.settings.connect('changed::accent-color', () => {
+            this.updateAccentColor();
+        });
+        this.updateAccentColor();
     }
 
     disable() {
@@ -161,6 +139,20 @@ class Extension {
         }
     }
 
+    updateAccentColor() {
+        this.accentColor = this.settings.get_string('accent-color');
+        this.updateGtkTheming('gtk-4.0', true);
+        if (this.settings.get_boolean('theme-flatpak')) {
+            this.updateFlatpakTheming(true);
+        }
+        if (this.settings.get_boolean('theme-gtk3')) {
+            this.updateGtkTheming('gtk-3.0', true);
+        }
+        if (this.settings.get_boolean('theme-shell')) {
+            this.updateShellTheming(true);
+        }
+    }
+
     updateGtkTheming(gtkVer, apply) {
         if (apply && this.accentColor != 'blue') {
             const gtkDir = Gio.File.new_for_path(HomeDir + '/.config/' + gtkVer);
@@ -169,7 +161,7 @@ class Extension {
             }
             const str = this.readFile(MeDir + '/resources/' + this.accentColor + '/gtk.css');
             this.writeFile(str, HomeDir + '/.config/' + gtkVer + '/gtk.css');
-        } else if (!apply) {
+        } else {
             this.deleteFile(HomeDir + '/.config/' + gtkVer + '/gtk.css');
         }
     }
@@ -183,7 +175,7 @@ class Extension {
             } catch (e) {
                 logError(e);
             }
-        } else if (!apply) {
+        } else {
             try {
                 GLib.spawn_command_line_async(
                     'flatpak override --user --nofilesystem=xdg-config/gtk-4.0 --nofilesystem=xdg-config/gtk-3.0'
@@ -230,7 +222,7 @@ class Extension {
                 str,
                 HomeDir + '/.local/share/themes/Custom-Accent-Colors/gnome-shell/toggle-on.svg'
             );
-        } else if (!apply) {
+        } else {
             this.deleteFile(
                 HomeDir + '/.local/share/themes/Custom-Accent-Colors/gnome-shell/gnome-shell.css'
             );
