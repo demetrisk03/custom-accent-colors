@@ -33,6 +33,9 @@ class Extension {
             'org.gnome.shell.extensions.custom-accent-colors'
         );
 
+        this.handlerAccentColor = this.settings.connect('changed::accent-color', () => {
+            this.updateAccentColor();
+        });
         this.handlerFlatpak = this.settings.connect('changed::theme-flatpak', () => {
             this.updateFlatpakTheming(this.settings.get_boolean('theme-flatpak'));
         });
@@ -43,9 +46,6 @@ class Extension {
             this.updateShellTheming(this.settings.get_boolean('theme-shell'));
         });
 
-        this.handlerAccentColor = this.settings.connect('changed::accent-color', () => {
-            this.updateAccentColor();
-        });
         this.updateAccentColor();
     }
 
