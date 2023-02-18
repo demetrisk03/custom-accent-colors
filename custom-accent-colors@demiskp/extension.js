@@ -173,7 +173,7 @@ class Extension {
             if (str !== this.readFile(MeDir + '/resources/' + this.accentColor + '/gtk.css')) {
                 this.writeFile(
                     str,
-                    HomeDir + '/.config/' + gtkVer + '/gtk-pre-custom-accent-colors.css'
+                    HomeDir + '/.config/' + gtkVer + '/gtk.pre-custom-accent-colors.css'
                 );
             }
         }
@@ -189,7 +189,7 @@ class Extension {
             this.writeFile(str, HomeDir + '/.config/' + gtkVer + '/gtk.css');
         } else {
             const backupFile = Gio.File.new_for_path(
-                HomeDir + '/.config/' + gtkVer + '/gtk-pre-custom-accent-colors.css'
+                HomeDir + '/.config/' + gtkVer + '/gtk.pre-custom-accent-colors.css'
             );
             if (backupFile.query_exists(null)) {
                 const str = this.readFile(backupFile.get_path());
