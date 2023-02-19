@@ -38,15 +38,9 @@ class CustomAccentColorsPrefsWidget extends Adw.PreferencesPage {
     constructor() {
         super();
 
-        this.actionGroup = new Gio.SimpleActionGroup();
-
         this.settings = ExtensionUtils.getSettings(
             'org.gnome.shell.extensions.custom-accent-colors'
         );
-
-        this.actionGroup.add_action(this.settings.create_action('theme-flatpak'));
-        this.actionGroup.add_action(this.settings.create_action('theme-gtk3'));
-        this.actionGroup.add_action(this.settings.create_action('theme-shell'));
 
         this.mainGroup = new Adw.PreferencesGroup();
         this.add(this.mainGroup);
@@ -68,7 +62,6 @@ class CustomAccentColorsPrefsWidget extends Adw.PreferencesPage {
             model: listModel,
             expression: new Gtk.PropertyExpression(CustomAccentColors, null, 'name'),
         });
-        this.mainGroup.add(this.mainRow);
         this.mainRow.connect('notify::selected-item', () => {
             const { selectedItem } = this.mainRow;
             this.settings.set_string('accent-color', selectedItem.value);
@@ -77,6 +70,7 @@ class CustomAccentColorsPrefsWidget extends Adw.PreferencesPage {
             this.updateSelectedColor();
         });
         this.updateSelectedColor();
+        this.mainGroup.add(this.mainRow);
 
         this.extraGroup = new Adw.PreferencesGroup({
             title: 'Extra Options',
@@ -88,38 +82,38 @@ class CustomAccentColorsPrefsWidget extends Adw.PreferencesPage {
             valign: Gtk.Align.CENTER,
         });
         this.settings.bind('theme-flatpak', toggle, 'active', Gio.SettingsBindFlags.DEFAULT);
-        this.extraRow = new Adw.ActionRow({
+        let extraRow = new Adw.ActionRow({
             title: 'Flatpak Theming',
             activatable_widget: toggle,
         });
-        this.extraRow.add_suffix(toggle);
-        this.extraGroup.add(this.extraRow);
+        extraRow.add_suffix(toggle);
+        this.extraGroup.add(extraRow);
 
         toggle = new Gtk.Switch({
             action_name: 'theme-gtk3',
             valign: Gtk.Align.CENTER,
         });
         this.settings.bind('theme-gtk3', toggle, 'active', Gio.SettingsBindFlags.DEFAULT);
-        this.extraRow = new Adw.ActionRow({
+        extraRow = new Adw.ActionRow({
             title: 'GTK3 Theming',
             subtitle: 'Requires the "adw-gtk3" Theme.',
             activatable_widget: toggle,
         });
-        this.extraRow.add_suffix(toggle);
-        this.extraGroup.add(this.extraRow);
+        extraRow.add_suffix(toggle);
+        this.extraGroup.add(extraRow);
 
         toggle = new Gtk.Switch({
             action_name: 'theme-shell',
             valign: Gtk.Align.CENTER,
         });
         this.settings.bind('theme-shell', toggle, 'active', Gio.SettingsBindFlags.DEFAULT);
-        this.extraRow = new Adw.ActionRow({
+        extraRow = new Adw.ActionRow({
             title: 'Shell Theming',
             subtitle: 'Requires the Shell Theme to be set to "Custom-Accent-Colors".',
             activatable_widget: toggle,
         });
-        this.extraRow.add_suffix(toggle);
-        this.extraGroup.add(this.extraRow);
+        extraRow.add_suffix(toggle);
+        this.extraGroup.add(extraRow);
     }
 
     updateSelectedColor() {
