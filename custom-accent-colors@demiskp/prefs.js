@@ -64,7 +64,7 @@ class CustomAccentColorsPrefsWidget extends Adw.PreferencesPage {
         this.mainRow = new Adw.ComboRow({
             title: 'Accent Color',
             subtitle:
-                'Requires Log Out to activate. Any custom "gtk.css" files will be irreversibly overwritten!',
+                'Requires Log Out to activate properly. Any custom "gtk.css" files will be irreversibly overwritten!',
             model: listModel,
             expression: new Gtk.PropertyExpression(CustomAccentColors, null, 'name'),
         });
