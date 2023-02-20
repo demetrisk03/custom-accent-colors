@@ -148,15 +148,16 @@ class Extension {
     }
 
     updateGtkTheming(gtkVer, apply) {
+        const gtkFile = Gio.File.new_for_path(HomeDir + '/.config/' + gtkVer + '/gtk.css');
         if (apply && this.accentColor != 'blue') {
             const gtkDir = Gio.File.new_for_path(HomeDir + '/.config/' + gtkVer);
             if (!gtkDir.query_exists(null)) {
                 this.createDir(gtkDir.get_path());
             }
             const str = this.readFile(MeDir + '/resources/' + this.accentColor + '/gtk.css');
-            this.writeFile(str, HomeDir + '/.config/' + gtkVer + '/gtk.css');
-        } else {
-            this.deleteFileDir(HomeDir + '/.config/' + gtkVer + '/gtk.css');
+            this.writeFile(str, gtkFile.get_path());
+        } else if (gtkFile.query_exists(null)) {
+            this.deleteFileDir(gtkFile.get_path());
         }
     }
 
@@ -181,50 +182,36 @@ class Extension {
     }
 
     updateShellTheming(apply) {
-        if (apply && this.accentColor != 'blue') {
-            let shellThemeDir = Gio.File.new_for_path(
-                HomeDir + '/.local/share/themes/CustomAccentColors'
-            );
-            if (shellThemeDir.query_exists(null)) {
-                this.deleteFileDir(
-                    HomeDir + '/.local/share/themes/CustomAccentColors/gnome-shell/gnome-shell.css'
-                );
-                this.deleteFileDir(
-                    HomeDir + '/.local/share/themes/CustomAccentColors/gnome-shell/toggle-on.svg'
-                );
-                this.deleteFileDir(HomeDir + '/.local/share/themes/CustomAccentColors/gnome-shell');
-                this.deleteFileDir(shellThemeDir.get_path());
-            }
+        let shellThemeDir = Gio.File.new_for_path(
+            HomeDir + '/.local/share/themes/CustomAccentColors'
+        );
+        if (shellThemeDir.query_exists(null)) {
+            this.deleteFileDir(shellThemeDir.get_path() + '/gnome-shell/gnome-shell.css');
+            this.deleteFileDir(shellThemeDir.get_path() + '/gnome-shell/toggle-on.svg');
+            this.deleteFileDir(shellThemeDir.get_path() + '/gnome-shell');
+            this.deleteFileDir(shellThemeDir.get_path());
+        }
 
-            shellThemeDir = Gio.File.new_for_path(
-                HomeDir + '/.local/share/themes/Custom-Accent-Colors/gnome-shell'
-            );
+        shellThemeDir = Gio.File.new_for_path(
+            HomeDir + '/.local/share/themes/Custom-Accent-Colors'
+        );
+        if (apply && this.accentColor != 'blue') {
             if (!shellThemeDir.query_exists(null)) {
-                this.createDir(shellThemeDir.get_path());
+                this.createDir(shellThemeDir.get_path() + '/gnome-shell');
             }
             let str = this.readFile(
                 MeDir + '/resources/' + this.accentColor + '/gnome-shell/gnome-shell.css'
             );
-            this.writeFile(
-                str,
-                HomeDir + '/.local/share/themes/Custom-Accent-Colors/gnome-shell/gnome-shell.css'
-            );
+            this.writeFile(str, shellThemeDir.get_path() + '/gnome-shell/gnome-shell.css');
             str = this.readFile(
                 MeDir + '/resources/' + this.accentColor + '/gnome-shell/toggle-on.svg'
             );
-            this.writeFile(
-                str,
-                HomeDir + '/.local/share/themes/Custom-Accent-Colors/gnome-shell/toggle-on.svg'
-            );
-        } else {
-            this.deleteFileDir(
-                HomeDir + '/.local/share/themes/Custom-Accent-Colors/gnome-shell/gnome-shell.css'
-            );
-            this.deleteFileDir(
-                HomeDir + '/.local/share/themes/Custom-Accent-Colors/gnome-shell/toggle-on.svg'
-            );
-            this.deleteFileDir(HomeDir + '/.local/share/themes/Custom-Accent-Colors/gnome-shell');
-            this.deleteFileDir(HomeDir + '/.local/share/themes/Custom-Accent-Colors');
+            this.writeFile(str, shellThemeDir.get_path() + '/gnome-shell/toggle-on.svg');
+        } else if (shellThemeDir.query_exists(null)) {
+            this.deleteFileDir(shellThemeDir.get_path() + '/gnome-shell/gnome-shell.css');
+            this.deleteFileDir(shellThemeDir.get_path() + '/gnome-shell/toggle-on.svg');
+            this.deleteFileDir(shellThemeDir.get_path() + '/gnome-shell');
+            this.deleteFileDir(shellThemeDir.get_path());
         }
     }
 }
