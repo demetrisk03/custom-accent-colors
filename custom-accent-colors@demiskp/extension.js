@@ -26,6 +26,8 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const MeDir = Me.dir.get_path();
 const HomeDir = GLib.get_home_dir();
+const Config = imports.misc.config;
+const ShellVersion = parseInt(Config.PACKAGE_VERSION);
 
 class Extension {
     enable() {
@@ -190,11 +192,21 @@ class Extension {
                 this.createDir(shellThemeDir.get_path() + '/gnome-shell');
             }
             let str = this.readFile(
-                MeDir + '/resources/' + this.accentColor + '/gnome-shell/gnome-shell.css'
+                MeDir +
+                '/resources/' +
+                this.accentColor +
+                '/' +
+                ShellVersion +
+                '/gnome-shell/gnome-shell.css'
             );
             this.writeFile(str, shellThemeDir.get_path() + '/gnome-shell/gnome-shell.css');
             str = this.readFile(
-                MeDir + '/resources/' + this.accentColor + '/gnome-shell/toggle-on.svg'
+                MeDir +
+                '/resources/' +
+                this.accentColor +
+                '/' +
+                ShellVersion +
+                '/gnome-shell/toggle-on.svg'
             );
             this.writeFile(str, shellThemeDir.get_path() + '/gnome-shell/toggle-on.svg');
         } else if (shellThemeDir.query_exists(null)) {
