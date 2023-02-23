@@ -195,18 +195,18 @@ class Extension {
                 MeDir +
                 '/resources/' +
                 this.accentColor +
-                '/' +
+                '/gnome-shell/' +
                 ShellVersion +
-                '/gnome-shell/gnome-shell.css'
+                '/gnome-shell.css'
             );
             this.writeFile(str, shellThemeDir.get_path() + '/gnome-shell/gnome-shell.css');
             str = this.readFile(
                 MeDir +
                 '/resources/' +
                 this.accentColor +
-                '/' +
+                '/gnome-shell/' +
                 ShellVersion +
-                '/gnome-shell/toggle-on.svg'
+                '/toggle-on.svg'
             );
             this.writeFile(str, shellThemeDir.get_path() + '/gnome-shell/toggle-on.svg');
         } else if (shellThemeDir.query_exists(null)) {
