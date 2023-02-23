@@ -183,16 +183,6 @@ class Extension {
 
     updateShellTheming(apply) {
         let shellThemeDir = Gio.File.new_for_path(
-            HomeDir + '/.local/share/themes/CustomAccentColors'
-        );
-        if (shellThemeDir.query_exists(null)) {
-            this.deleteFileDir(shellThemeDir.get_path() + '/gnome-shell/gnome-shell.css');
-            this.deleteFileDir(shellThemeDir.get_path() + '/gnome-shell/toggle-on.svg');
-            this.deleteFileDir(shellThemeDir.get_path() + '/gnome-shell');
-            this.deleteFileDir(shellThemeDir.get_path());
-        }
-
-        shellThemeDir = Gio.File.new_for_path(
             HomeDir + '/.local/share/themes/Custom-Accent-Colors'
         );
         if (apply && this.accentColor != 'blue') {
