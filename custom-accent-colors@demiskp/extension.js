@@ -151,7 +151,7 @@ class Extension {
 
     updateGtkTheming(gtkVer, apply) {
         const gtkFile = Gio.File.new_for_path(HomeDir + '/.config/' + gtkVer + '/gtk.css');
-        if (apply && this.accentColor != 'blue') {
+        if (apply && this.accentColor != 'default') {
             const gtkDir = Gio.File.new_for_path(HomeDir + '/.config/' + gtkVer);
             if (!gtkDir.query_exists(null)) {
                 this.createDir(gtkDir.get_path());
@@ -187,26 +187,26 @@ class Extension {
         let shellThemeDir = Gio.File.new_for_path(
             HomeDir + '/.local/share/themes/Custom-Accent-Colors'
         );
-        if (apply && this.accentColor != 'blue') {
+        if (apply && this.accentColor != 'default') {
             if (!shellThemeDir.query_exists(null)) {
                 this.createDir(shellThemeDir.get_path() + '/gnome-shell');
             }
             let str = this.readFile(
                 MeDir +
-                '/resources/' +
-                this.accentColor +
-                '/gnome-shell/' +
-                ShellVersion +
-                '/gnome-shell.css'
+                    '/resources/' +
+                    this.accentColor +
+                    '/gnome-shell/' +
+                    ShellVersion +
+                    '/gnome-shell.css'
             );
             this.writeFile(str, shellThemeDir.get_path() + '/gnome-shell/gnome-shell.css');
             str = this.readFile(
                 MeDir +
-                '/resources/' +
-                this.accentColor +
-                '/gnome-shell/' +
-                ShellVersion +
-                '/toggle-on.svg'
+                    '/resources/' +
+                    this.accentColor +
+                    '/gnome-shell/' +
+                    ShellVersion +
+                    '/toggle-on.svg'
             );
             this.writeFile(str, shellThemeDir.get_path() + '/gnome-shell/toggle-on.svg');
         } else if (shellThemeDir.query_exists(null)) {

@@ -6,29 +6,31 @@ const { Adw, Gio, GObject, Gtk } = imports.gi;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 
-const CustomAccentColors = GObject.registerClass({
-    Properties: {
-        name: GObject.ParamSpec.string(
-            'name',
-            'name',
-            'name',
-            GObject.ParamFlags.READWRITE,
-            null
-        ),
-        value: GObject.ParamSpec.string(
-            'value',
-            'value',
-            'value',
-            GObject.ParamFlags.READWRITE,
-            null
-        ),
+const CustomAccentColors = GObject.registerClass(
+    {
+        Properties: {
+            name: GObject.ParamSpec.string(
+                'name',
+                'name',
+                'name',
+                GObject.ParamFlags.READWRITE,
+                null
+            ),
+            value: GObject.ParamSpec.string(
+                'value',
+                'value',
+                'value',
+                GObject.ParamFlags.READWRITE,
+                null
+            ),
+        },
     },
-},
-class CustomAccentColors extends GObject.Object {
-    _init(name, value) {
-        super._init({ name, value });
+    class CustomAccentColors extends GObject.Object {
+        _init(name, value) {
+            super._init({ name, value });
+        }
     }
-});
+);
 
 class CustomAccentColorsPrefsWidget extends Adw.PreferencesPage {
     static {
@@ -46,7 +48,8 @@ class CustomAccentColorsPrefsWidget extends Adw.PreferencesPage {
         this.add(this.mainGroup);
 
         const listModel = new Gio.ListStore({ item_type: CustomAccentColors });
-        listModel.append(new CustomAccentColors('Blue (Default)', 'blue'));
+        listModel.append(new CustomAccentColors('Default', 'default'));
+        listModel.append(new CustomAccentColors('Blue', 'blue'));
         listModel.append(new CustomAccentColors('Green', 'green'));
         listModel.append(new CustomAccentColors('Yellow', 'yellow'));
         listModel.append(new CustomAccentColors('Orange', 'orange'));
@@ -129,7 +132,7 @@ class CustomAccentColorsPrefsWidget extends Adw.PreferencesPage {
     }
 }
 
-function init() { }
+function init() {}
 
 function buildPrefsWidget() {
     return new CustomAccentColorsPrefsWidget();
