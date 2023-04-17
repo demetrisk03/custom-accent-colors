@@ -4,7 +4,8 @@
     "uuid": "custom-accent-colors@demiskp",
     "version": 5,
     "shell-version": [
-        "44", "43"
+        "43",
+        "44"
     ],
     "url": "https://github.com/demiskp/custom-accent-colors"
 }
