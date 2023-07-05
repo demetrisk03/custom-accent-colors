@@ -6,9 +6,8 @@ You can install this extension from [extensions.gnome.org](https://extensions.gn
 
 ## Images
 
-![image](https://github.com/Its-Juice/custom-accent-colors/assets/111902390/da9ed414-13d5-4dbf-837e-ad9db1e2a15f)
-![image](https://github.com/Its-Juice/custom-accent-colors/assets/111902390/4c0872bd-4d0f-4a37-baa9-b0d283c68fd4)
 
+![New Project](https://github.com/Its-Juice/custom-accent-colors/assets/111902390/6e0b68fe-fdab-4c52-a27d-b719cb7f4929)
 
 
 ## Building
