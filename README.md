@@ -4,9 +4,9 @@ This extension allows the user to choose between 9 Custom Accent Colors. The Acc
 
 You can install this extension from [extensions.gnome.org](https://extensions.gnome.org/extension/5547/custom-accent-colors).
 
-<p float="Centre">
-<img src="https://github.com/Its-Juice/custom-accent-colors/assets/111902390/6e0b68fe-fdab-4c52-a27d-b719cb7f4929" width="25%" />
-<img src="https://github.com/Its-Juice/custom-accent-colors/assets/111902390/babc22bd-176c-42de-82ea-a4e690738bc5" width="50%" />
+<p align="Centre">
+    <img src="https://github.com/Its-Juice/custom-accent-colors/assets/111902390/6e0b68fe-fdab-4c52-a27d-b719cb7f4929" width="25%"/>
+    <img src="https://github.com/Its-Juice/custom-accent-colors/assets/111902390/babc22bd-176c-42de-82ea-a4e690738bc5" width="50%"/>
 </p>
 
 ## Building
