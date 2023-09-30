@@ -18,33 +18,32 @@
 
 /* exported init */
 
-const { Gio, GLib } = imports.gi;
+import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
 
-const Main = imports.ui.main;
-const ExtensionUtils = imports.misc.extensionUtils;
+import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
 
-const Me = ExtensionUtils.getCurrentExtension();
-const MeDir = Me.dir.get_path();
-const HomeDir = GLib.get_home_dir();
-const Config = imports.misc.config;
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import * as Config from 'resource:///org/gnome/shell/misc/config.js';
+
 const ShellVersion = parseInt(Config.PACKAGE_VERSION);
 
-class Extension {
+export default class CustomAccentColors extends Extension {
     enable() {
-        this.settings = ExtensionUtils.getSettings(
+        this.settings = this.getSettings(
             'org.gnome.shell.extensions.custom-accent-colors'
         );
 
-        this.handlerAccentColor = this.settings.connect('changed::accent-color', () => {
+        this.settings.connect('changed::accent-color', () => {
             this.applyAccentColor(true);
         });
-        this.handlerFlatpak = this.settings.connect('changed::theme-flatpak', () => {
+        this.settings.connect('changed::theme-flatpak', () => {
             this.updateFlatpakTheming(this.settings.get_boolean('theme-flatpak'));
         });
-        this.handlerGTK3 = this.settings.connect('changed::theme-gtk3', () => {
+        this.settings.connect('changed::theme-gtk3', () => {
             this.updateGtkTheming('gtk-3.0', this.settings.get_boolean('theme-gtk3'));
         });
-        this.handlerShell = this.settings.connect('changed::theme-shell', () => {
+        this.settings.connect('changed::theme-shell', () => {
             this.updateShellTheming(this.settings.get_boolean('theme-shell'));
         });
 
@@ -54,22 +53,7 @@ class Extension {
     disable() {
         this.applyAccentColor(false);
 
-        if (this.handlerAccentColor) {
-            this.settings.disconnect(this.handlerAccentColor);
-            this.handlerAccentColor = null;
-        }
-        if (this.handlerFlatpak) {
-            this.settings.disconnect(this.handlerFlatpak);
-            this.handlerFlatpak = null;
-        }
-        if (this.handlerGTK3) {
-            this.settings.disconnect(this.handlerGTK3);
-            this.handlerGTK3 = null;
-        }
-        if (this.handlerShell) {
-            this.settings.disconnect(this.handlerShell);
-            this.handlerShell = null;
-        }
+        this.settings?.run_dispose();
         this.settings = null;
     }
 
@@ -150,13 +134,15 @@ class Extension {
     }
 
     updateGtkTheming(gtkVer, apply) {
-        const gtkFile = Gio.File.new_for_path(HomeDir + '/.config/' + gtkVer + '/gtk.css');
+        const meDir = this.path;
+        const homeDir = GLib.get_home_dir();
+        const gtkFile = Gio.File.new_for_path(homeDir + '/.config/' + gtkVer + '/gtk.css');
         if (apply && this.accentColor != 'default') {
-            const gtkDir = Gio.File.new_for_path(HomeDir + '/.config/' + gtkVer);
+            const gtkDir = Gio.File.new_for_path(homeDir + '/.config/' + gtkVer);
             if (!gtkDir.query_exists(null)) {
                 this.createDir(gtkDir.get_path());
             }
-            const str = this.readFile(MeDir + '/resources/' + this.accentColor + '/gtk.css');
+            const str = this.readFile(meDir + '/resources/' + this.accentColor + '/gtk.css');
             this.writeFile(str, gtkFile.get_path());
         } else if (gtkFile.query_exists(null)) {
             this.deleteFileDir(gtkFile.get_path());
@@ -184,29 +170,31 @@ class Extension {
     }
 
     updateShellTheming(apply) {
+        const meDir = this.path;
+        const homeDir = GLib.get_home_dir();
         let shellThemeDir = Gio.File.new_for_path(
-            HomeDir + '/.local/share/themes/Custom-Accent-Colors'
+            homeDir + '/.local/share/themes/Custom-Accent-Colors'
         );
         if (apply && this.accentColor != 'default') {
             if (!shellThemeDir.query_exists(null)) {
                 this.createDir(shellThemeDir.get_path() + '/gnome-shell');
             }
             let str = this.readFile(
-                MeDir +
-                    '/resources/' +
-                    this.accentColor +
-                    '/gnome-shell/' +
-                    ShellVersion +
-                    '/gnome-shell.css'
+                meDir +
+                '/resources/' +
+                this.accentColor +
+                '/gnome-shell/' +
+                ShellVersion +
+                '/gnome-shell.css'
             );
             this.writeFile(str, shellThemeDir.get_path() + '/gnome-shell/gnome-shell.css');
             str = this.readFile(
-                MeDir +
-                    '/resources/' +
-                    this.accentColor +
-                    '/gnome-shell/' +
-                    ShellVersion +
-                    '/toggle-on.svg'
+                meDir +
+                '/resources/' +
+                this.accentColor +
+                '/gnome-shell/' +
+                ShellVersion +
+                '/toggle-on.svg'
             );
             this.writeFile(str, shellThemeDir.get_path() + '/gnome-shell/toggle-on.svg');
         } else if (shellThemeDir.query_exists(null)) {
@@ -216,8 +204,4 @@ class Extension {
             this.deleteFileDir(shellThemeDir.get_path());
         }
     }
-}
-
-function init() {
-    return new Extension();
 }
