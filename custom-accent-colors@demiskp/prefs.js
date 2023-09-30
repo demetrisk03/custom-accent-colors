@@ -2,12 +2,14 @@
 
 /* exported init buildPrefsWidget */
 
-const { Adw, Gio, GObject, Gtk } = imports.gi;
+import Adw from 'gi://Adw';
+import Gio from 'gi://Gio';
+import GObject from 'gi://GObject';
+import Gtk from 'gi://Gtk';
 
-const ExtensionUtils = imports.misc.extensionUtils;
+import {ExtensionPreferences} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
-const CustomAccentColors = GObject.registerClass(
-    {
+const CustomAccentColors = GObject.registerClass({
         Properties: {
             name: GObject.ParamSpec.string(
                 'name',
@@ -37,12 +39,10 @@ class CustomAccentColorsPrefsWidget extends Adw.PreferencesPage {
         GObject.registerClass(this);
     }
 
-    constructor() {
+    constructor(settings) {
         super();
 
-        this.settings = ExtensionUtils.getSettings(
-            'org.gnome.shell.extensions.custom-accent-colors'
-        );
+        this.settings = settings;
 
         this.mainGroup = new Adw.PreferencesGroup();
         this.add(this.mainGroup);
@@ -132,8 +132,10 @@ class CustomAccentColorsPrefsWidget extends Adw.PreferencesPage {
     }
 }
 
-function init() {}
-
-function buildPrefsWidget() {
-    return new CustomAccentColorsPrefsWidget();
+export default class CustomAccentColorsPrefs extends ExtensionPreferences {
+    getPreferencesWidget() {
+        return new CustomAccentColorsPrefsWidget(
+            this.getSettings('org.gnome.shell.extensions.custom-accent-colors')
+        );
+    }
 }
