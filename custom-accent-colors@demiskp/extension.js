@@ -53,7 +53,6 @@ export default class CustomAccentColors extends Extension {
     disable() {
         this.applyAccentColor(false);
 
-        this.settings?.run_dispose();
         this.settings = null;
     }
 
@@ -62,7 +61,7 @@ export default class CustomAccentColors extends Extension {
             const file = Gio.File.new_for_path(path);
             file.make_directory_with_parents(null);
         } catch (e) {
-            log(e);
+            console.error(e);;
         }
     }
 
@@ -74,7 +73,7 @@ export default class CustomAccentColors extends Extension {
             const contentsString = decoder.decode(contents);
             return contentsString;
         } catch (e) {
-            log(e);
+            console.error(e);;
         }
     }
 
@@ -98,7 +97,7 @@ export default class CustomAccentColors extends Extension {
                 );
             });
         } catch (e) {
-            log(e);
+            console.error(e);;
         }
     }
 
@@ -115,7 +114,7 @@ export default class CustomAccentColors extends Extension {
                 });
             });
         } catch (e) {
-            log(e);
+            console.error(e);;
         }
     }
 
