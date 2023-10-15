@@ -155,7 +155,7 @@ export default class CustomAccentColors extends Extension {
                     'flatpak override --user --filesystem=xdg-config/gtk-4.0:ro --filesystem=xdg-config/gtk-3.0:ro'
                 );
             } catch (e) {
-                logError(e);
+                console.error(e);
             }
         } else {
             try {
@@ -163,7 +163,7 @@ export default class CustomAccentColors extends Extension {
                     'flatpak override --user --nofilesystem=xdg-config/gtk-4.0 --nofilesystem=xdg-config/gtk-3.0'
                 );
             } catch (e) {
-                logError(e);
+                console.error(e);
             }
         }
     }
