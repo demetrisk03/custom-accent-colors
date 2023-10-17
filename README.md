@@ -4,7 +4,7 @@ This extension allows the user to choose between 9 Custom Accent Colors. The Acc
 
 You can install this extension from [extensions.gnome.org](https://extensions.gnome.org/extension/5547/custom-accent-colors).
 
-![Alt text](./custom-accent-colors@demiskp/resources/screenshot.png)
+![Screenshot](/custom-accent-colors@demiskp/resources/screenshot.png)
 
 ## Building
 
