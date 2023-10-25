@@ -117,6 +117,19 @@ class CustomAccentColorsPrefsWidget extends Adw.PreferencesPage {
         });
         extraRow.add_suffix(toggle);
         this.extraGroup.add(extraRow);
+
+        toggle = new Gtk.Switch({
+            action_name: 'theme-icons',
+            valign: Gtk.Align.CENTER,
+        });
+        this.settings.bind('theme-icons', toggle, 'active', Gio.SettingsBindFlags.DEFAULT);
+        extraRow = new Adw.ActionRow({
+            title: 'Icon Theming',
+            subtitle: 'Color folder icons and the Files app icon',
+            activatable_widget: toggle,
+        })
+        extraRow.add_suffix(toggle);
+        this.extraGroup.add(extraRow);
     }
 
     updateSelectedColor() {

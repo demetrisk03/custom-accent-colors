@@ -46,6 +46,9 @@ export default class CustomAccentColors extends Extension {
         this.settings.connect('changed::theme-shell', () => {
             this.updateShellTheming(this.settings.get_boolean('theme-shell'));
         });
+        this.settings.connect('changed::theme-icons', () => {
+            this.updateIconTheming(this.settings.get_boolean('theme-icons'));
+        })
 
         this.applyAccentColor(true);
     }
@@ -130,6 +133,9 @@ export default class CustomAccentColors extends Extension {
         if (apply && this.settings.get_boolean('theme-shell')) {
             this.updateShellTheming(true);
         }
+        if (this.settings.get_boolean('theme-icons')) {
+            this.updateIconTheming(apply);
+        }
     }
 
     updateGtkTheming(gtkVer, apply) {
@@ -201,6 +207,36 @@ export default class CustomAccentColors extends Extension {
             this.deleteFileDir(shellThemeDir.get_path() + '/gnome-shell/toggle-on.svg');
             this.deleteFileDir(shellThemeDir.get_path() + '/gnome-shell');
             this.deleteFileDir(shellThemeDir.get_path());
+        }
+    }
+
+    updateIconTheming(apply) {
+        const iconTheme = new Gio.Settings({
+            schema: 'org.gnome.desktop.interface',
+        });
+        const meDir = this.path;
+        const homeDir = GLib.get_home_dir();
+        let iconThemeDir = Gio.File.new_for_path(homeDir + '/.local/share/icons/');
+        let iconThemeDirText = iconThemeDir.get_path()
+        if (apply && this.accentColor != 'default' && this.accentColor != 'blue') {
+            if (!iconThemeDir.query_exists(null)) {
+                this.createDir(iconThemeDir.get_path());
+            }
+            let iconThemeTar = Gio.File.new_for_path(
+                meDir +
+                '/resources/' +
+                this.accentColor + '/' +
+                'custom-icon-colors.tar.gz'
+            );
+            let iconThemeTarText = iconThemeTar.get_path()
+            GLib.spawn_command_line_sync(
+                `tar -xzf ${iconThemeTarText} -C ${iconThemeDirText} --overwrite`
+            );
+            iconTheme.set_string('icon-theme', 'custom-icon-colors');
+            iconTheme.apply()
+        } else {
+            iconTheme.set_string('icon-theme', 'Adwaita');
+            iconTheme.apply()
         }
     }
 }
