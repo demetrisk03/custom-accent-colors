@@ -125,7 +125,6 @@ class CustomAccentColorsPrefsWidget extends Adw.PreferencesPage {
         this.settings.bind('theme-icons', toggle, 'active', Gio.SettingsBindFlags.DEFAULT);
         extraRow = new Adw.ActionRow({
             title: 'Icon Theming',
-            subtitle: 'Color folder icons and the Files app icon',
             activatable_widget: toggle,
         })
         extraRow.add_suffix(toggle);
