@@ -211,32 +211,35 @@ export default class CustomAccentColors extends Extension {
     }
 
     updateIconTheming(apply) {
-        const iconTheme = new Gio.Settings({
+        const iconThemeSetting = new Gio.Settings({
             schema: 'org.gnome.desktop.interface',
         });
         const meDir = this.path;
         const homeDir = GLib.get_home_dir();
-        let iconThemeDir = Gio.File.new_for_path(homeDir + '/.local/share/icons/');
-        let iconThemeDirText = iconThemeDir.get_path()
+        const iconThemeDir = Gio.File.new_for_path(homeDir + '/.local/share/icons/');
+        const iconSymLink = Gio.File.new_for_path(homeDir + '/.local/share/icons/Custom-Accent-Icons');
+        if (iconSymLink.query_exists(null)){
+            try {
+                iconSymLink.delete(null);
+            } catch(e) {
+                console.error(e);
+            }
+        }
         if (apply && this.accentColor != 'default' && this.accentColor != 'blue') {
             if (!iconThemeDir.query_exists(null)) {
                 this.createDir(iconThemeDir.get_path());
             }
-            let iconThemeTar = Gio.File.new_for_path(
+            let iconTheme = Gio.File.new_for_path(
                 meDir +
                 '/resources/' +
-                this.accentColor + '/' +
-                'custom-icon-colors.tar.gz'
+                this.accentColor +
+                '/custom-icon-colors'
             );
-            let iconThemeTarText = iconThemeTar.get_path()
-            GLib.spawn_command_line_sync(
-                `tar -xzf ${iconThemeTarText} -C ${iconThemeDirText} --overwrite`
-            );
-            iconTheme.set_string('icon-theme', 'custom-icon-colors');
-            iconTheme.apply()
+            iconSymLink.make_symbolic_link(iconTheme.get_path(), null);
+            iconThemeSetting.set_string('icon-theme', 'Custom-Accent-Icons');
         } else {
-            iconTheme.set_string('icon-theme', 'Adwaita');
-            iconTheme.apply()
+            iconThemeSetting.set_string('icon-theme', 'Adwaita');
         }
+        iconThemeSetting.apply();
     }
 }
