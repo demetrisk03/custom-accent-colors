@@ -46,6 +46,9 @@ export default class CustomAccentColors extends Extension {
         this.settings.connect('changed::theme-shell', () => {
             this.updateShellTheming(this.settings.get_boolean('theme-shell'));
         });
+        this.settings.connect('changed::theme-icons', () => {
+            this.updateIconTheming(this.settings.get_boolean('theme-icons'));
+        })
 
         this.applyAccentColor(true);
     }
@@ -130,6 +133,9 @@ export default class CustomAccentColors extends Extension {
         if (apply && this.settings.get_boolean('theme-shell')) {
             this.updateShellTheming(true);
         }
+        if (this.settings.get_boolean('theme-icons')) {
+            this.updateIconTheming(apply);
+        }
     }
 
     updateGtkTheming(gtkVer, apply) {
@@ -202,5 +208,38 @@ export default class CustomAccentColors extends Extension {
             this.deleteFileDir(shellThemeDir.get_path() + '/gnome-shell');
             this.deleteFileDir(shellThemeDir.get_path());
         }
+    }
+
+    updateIconTheming(apply) {
+        const iconThemeSetting = new Gio.Settings({
+            schema: 'org.gnome.desktop.interface',
+        });
+        const meDir = this.path;
+        const homeDir = GLib.get_home_dir();
+        const iconThemeDir = Gio.File.new_for_path(homeDir + '/.local/share/icons/');
+        const iconSymLink = Gio.File.new_for_path(homeDir + '/.local/share/icons/Custom-Accent-Icons');
+        if (iconSymLink.query_exists(null)){
+            try {
+                iconSymLink.delete(null);
+            } catch(e) {
+                console.error(e);
+            }
+        }
+        if (apply && this.accentColor != 'default' && this.accentColor != 'blue') {
+            if (!iconThemeDir.query_exists(null)) {
+                this.createDir(iconThemeDir.get_path());
+            }
+            let iconTheme = Gio.File.new_for_path(
+                meDir +
+                '/resources/' +
+                this.accentColor +
+                '/custom-icon-colors'
+            );
+            iconSymLink.make_symbolic_link(iconTheme.get_path(), null);
+            iconThemeSetting.set_string('icon-theme', 'Custom-Accent-Icons');
+        } else {
+            iconThemeSetting.set_string('icon-theme', 'Adwaita');
+        }
+        iconThemeSetting.apply();
     }
 }
