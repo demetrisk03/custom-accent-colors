@@ -140,10 +140,10 @@ export default class CustomAccentColors extends Extension {
 
     updateGtkTheming(gtkVer, apply) {
         const meDir = this.path;
-        const homeDir = GLib.get_home_dir();
-        const gtkFile = Gio.File.new_for_path(homeDir + '/.config/' + gtkVer + '/gtk.css');
+        const configDir = GLib.get_user_config_dir();
+        const gtkFile = Gio.File.new_for_path(configDir + '/' + gtkVer + '/gtk.css');
         if (apply && this.accentColor != 'default') {
-            const gtkDir = Gio.File.new_for_path(homeDir + '/.config/' + gtkVer);
+            const gtkDir = Gio.File.new_for_path(configDir + '/' + gtkVer);
             if (!gtkDir.query_exists(null)) {
                 this.createDir(gtkDir.get_path());
             }
@@ -176,9 +176,9 @@ export default class CustomAccentColors extends Extension {
 
     updateShellTheming(apply) {
         const meDir = this.path;
-        const homeDir = GLib.get_home_dir();
+        const dataDir = GLib.get_user_data_dir();
         let shellThemeDir = Gio.File.new_for_path(
-            homeDir + '/.local/share/themes/Custom-Accent-Colors'
+            dataDir + '/themes/Custom-Accent-Colors'
         );
         if (apply && this.accentColor != 'default') {
             if (!shellThemeDir.query_exists(null)) {
@@ -215,9 +215,9 @@ export default class CustomAccentColors extends Extension {
             schema: 'org.gnome.desktop.interface',
         });
         const meDir = this.path;
-        const homeDir = GLib.get_home_dir();
-        const iconThemeDir = Gio.File.new_for_path(homeDir + '/.local/share/icons/');
-        const iconSymLink = Gio.File.new_for_path(homeDir + '/.local/share/icons/Custom-Accent-Icons');
+        const dataDir = GLib.get_user_data_dir();
+        const iconThemeDir = Gio.File.new_for_path(dataDir + '/icons/');
+        const iconSymLink = Gio.File.new_for_path(dataDir + '/icons/Custom-Accent-Icons');
         if (iconSymLink.query_exists(null)){
             try {
                 iconSymLink.delete(null);
