@@ -225,7 +225,7 @@ export default class CustomAccentColors extends Extension {
                 console.error(e);
             }
         }
-        if (apply && this.accentColor != 'default' && this.accentColor != 'blue') {
+        if (apply && this.accentColor != 'default') {
             if (!iconThemeDir.query_exists(null)) {
                 this.createDir(iconThemeDir.get_path());
             }

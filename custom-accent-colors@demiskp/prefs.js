@@ -49,7 +49,6 @@ class CustomAccentColorsPrefsWidget extends Adw.PreferencesPage {
 
         const listModel = new Gio.ListStore({ item_type: CustomAccentColors });
         listModel.append(new CustomAccentColors('Default', 'default'));
-        listModel.append(new CustomAccentColors('Blue', 'blue'));
         listModel.append(new CustomAccentColors('Green', 'green'));
         listModel.append(new CustomAccentColors('Yellow', 'yellow'));
         listModel.append(new CustomAccentColors('Orange', 'orange'));
