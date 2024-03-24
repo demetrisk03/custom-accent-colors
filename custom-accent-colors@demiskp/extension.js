@@ -121,7 +121,8 @@ export default class CustomAccentColors extends Extension {
     applyAccentColor(apply) {
         this.accentColor = this.settings.get_string('accent-color');
 
-        if ((this.accentColor == 'blue' || this.accentColor == 'magenta' || this.accentColor == 'gray')) {
+        /* Handle legacy values */
+        if (this.accentColor == 'blue' || this.accentColor == 'magenta' || this.accentColor == 'gray') {
             this.settings.set_string('accent-color', 'default');
             this.accentColor = this.settings.get_string('accent-color');
         }
