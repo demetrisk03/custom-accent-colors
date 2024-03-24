@@ -13,8 +13,5 @@
     <key name="theme-shell" type="b">
       <default>false</default>
     </key>
-    <key name="theme-icons" type="b">
-      <default>false</default>
-    </key>
   </schema>
 </schemalist>
