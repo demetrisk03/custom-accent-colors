@@ -53,6 +53,7 @@ class CustomAccentColorsPrefsWidget extends Adw.PreferencesPage {
         listModel.append(new CustomAccentColors('Yellow', 'yellow'));
         listModel.append(new CustomAccentColors('Orange', 'orange'));
         listModel.append(new CustomAccentColors('Red', 'red'));
+        listModel.append(new CustomAccentColors('Pink', 'pink'));
         listModel.append(new CustomAccentColors('Purple', 'purple'));
         listModel.append(new CustomAccentColors('Brown', 'brown'));
         this.mainRow = new Adw.ComboRow({
