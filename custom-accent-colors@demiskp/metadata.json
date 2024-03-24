@@ -2,9 +2,9 @@
     "name": "Custom Accent Colors",
     "description": "Allows the user to choose between 9 Custom Accent Colors. The Accent Color can be applied to GTK4/GTK3 apps and the Gnome Shell.",
     "uuid": "custom-accent-colors@demiskp",
-    "version": 9,
+    "version": 10,
     "shell-version": [
-        "45"
+        "46"
     ],
     "url": "https://github.com/demiskp/custom-accent-colors"
 }
