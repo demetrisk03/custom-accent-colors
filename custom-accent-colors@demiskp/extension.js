@@ -120,6 +120,12 @@ export default class CustomAccentColors extends Extension {
 
     applyAccentColor(apply) {
         this.accentColor = this.settings.get_string('accent-color');
+
+        if ((this.accentColor == 'blue' || this.accentColor == 'magenta' || this.accentColor == 'gray')) {
+            this.settings.set_string('accent-color', 'default');
+            this.accentColor = this.settings.get_string('accent-color');
+        }
+
         this.updateGtkTheming('gtk-4.0', apply);
         if (this.settings.get_boolean('theme-flatpak')) {
             this.updateFlatpakTheming(apply);
@@ -149,7 +155,7 @@ export default class CustomAccentColors extends Extension {
     }
 
     updateFlatpakTheming(apply) {
-        if (apply) {
+        if (apply && this.accentColor != 'default') {
             try {
                 GLib.spawn_command_line_async(
                     'flatpak override --user --filesystem=xdg-config/gtk-4.0:ro --filesystem=xdg-config/gtk-3.0:ro'
