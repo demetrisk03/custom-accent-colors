@@ -1,6 +1,6 @@
 {
     "name": "Custom Accent Colors",
-    "description": "A GNOME Shell Extension that provides 7 Custom Accent Colors. The Accent Color can be applied to GTK4/GTK3 apps and the Gnome Shell.",
+    "description": "A GNOME Shell Extension that provides 7 Custom Accent Colors. The selected Accent Color can be applied to GTK4/GTK3 apps and the Gnome Shell.",
     "uuid": "custom-accent-colors@demiskp",
     "version": 10,
     "shell-version": [
