@@ -121,12 +121,6 @@ export default class CustomAccentColors extends Extension {
     applyAccentColor(apply) {
         this.accentColor = this.settings.get_string('accent-color');
 
-        /* Handle legacy values */
-        if (this.accentColor == 'blue' || this.accentColor == 'magenta' || this.accentColor == 'gray') {
-            this.settings.set_string('accent-color', 'default');
-            this.accentColor = this.settings.get_string('accent-color');
-        }
-
         this.updateGtkTheming('gtk-4.0', apply);
         if (this.settings.get_boolean('theme-flatpak')) {
             this.updateFlatpakTheming(apply);
