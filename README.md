@@ -1,6 +1,6 @@
 ## Custom Accent Colors
 
-A GNOME Shell Extension that provides 7 custom accent colors. The selected accent color can be applied to GTK4/GTK3 apps and the GNOME Shell.
+A GNOME Shell Extension that provides 7 custom accent colors for versions 43-46. The selected accent color can be applied to GTK4/GTK3 apps and the GNOME Shell.
 
 You can install this extension from [extensions.gnome.org](https://extensions.gnome.org/extension/5547/custom-accent-colors).
 
